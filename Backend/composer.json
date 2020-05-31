@@ -1,0 +1,25 @@
+{
+    "name": "juanr/backend",
+    "authors": [
+        {
+            "name": "Juan Rodas",
+            "email": "juan.rodas.manez@gmail.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "^4.5",
+        "slim/psr7": "^1.1",
+        "slim/http": "^1.0",
+        "vlucas/phpdotenv": "^4.1",
+        "selective/config": "^0.2.0",
+        "firebase/php-jwt": "^5.2",
+        "cakephp/chronos": "^2.0",
+        "php-di/php-di": "^6.1",
+        "illuminate/database": "^7.13"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
