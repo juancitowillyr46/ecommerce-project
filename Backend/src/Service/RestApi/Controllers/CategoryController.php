@@ -26,8 +26,9 @@ class CategoryController {
 
     }
 
-    public function ReadById(ServerRequest $request, Response $response) {
-        return $response->withJson(['message' => 'GET']);
+    public function ReadById(ServerRequest $request, Response $response, array $args = []) {
+        $operationResult = $this->categoryLogic_->ReadById((int) $args['id']);
+        return $response->withJson(['message' => 'GET', 'data' => $operationResult]);
     }
 
     public function ReadAll(ServerRequest $request, Response $response) {
@@ -35,12 +36,15 @@ class CategoryController {
         return $response->withJson(['message' => 'GET', 'data' => $operationResut]);
     }
 
-    public function Update(ServerRequest $request, Response $response) {
-        return $response->withJson(['message' => 'PUT']);
+    public function Update(ServerRequest $request, Response $response, array $args = []) {
+        $requestData = (array) $request->getParsedBody();
+        $operationResult = $this->categoryLogic_->Update((int) $args['id'], $requestData);
+        return $response->withJson(['message' => 'PUT', 'data' => $operationResult]);
     }
 
-    public function Delete(ServerRequest $request, Response $response) {
-        return $response->withJson(['message' => 'DELETE']);
+    public function Delete(ServerRequest $request, Response $response, array $args = []) {
+        $operationResult = $this->categoryLogic_->Delete((int) $args['id']);
+        return $response->withJson(['message' => 'DELETE', 'data' => $operationResult]);
     }
     
 }

@@ -34,7 +34,8 @@ class CategoryLogic {
     }
 
     public function ReadById(Int $id) {
-
+        $read = $this->categoryRepository_->ReadById($id);
+        return $read;
     }
 
     public function ReadAll() {
@@ -42,12 +43,25 @@ class CategoryLogic {
         return $all;
     }
 
-    public function Update(Int $id, ProductDto $productDto) {
+    public function Update(Int $id, Array $attr) {
 
+        $categoryDto = new CategoryDto();
+        $categoryDto->id =           $attr['id'];
+        $categoryDto->name =         $attr['name'];
+        $categoryDto->description =  $attr['description'];
+        $categoryDto->slug =         $attr['slug'];
+        $categoryDto->image =        $attr['image'];
+        $categoryDto->updated_at =   date("Y-m-d H:i:s");
+
+        $update = $this->categoryRepository_->Update($id, $categoryDto);
+        return $update;
     }
 
     public function Delete(Int $id) {
-
+        $categoryDto = new CategoryDto();
+        $categoryDto->deleted_at = date("Y-m-d H:i:s");
+        $update = $this->categoryRepository_->Delete($id, $categoryDto);
+        return $update;
     }
 
 
