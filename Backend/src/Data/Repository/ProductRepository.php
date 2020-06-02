@@ -17,25 +17,37 @@ class ProductRepository {
         $productModel->category_id =  $attr->category_id;
         $productModel->status_id =    $attr->status_id;
         $productModel->created_at =   date("Y-m-d H:i:s");
-        // $productModel->updated_at =   date("Y-m-d H:i:s");
         $productModel->save();
-        return $attr;
+        return $productModel;
     }
 
     public function ReadById(Int $id) {
-
+        $category = ProductModel::find($id);
+        return $category;
     }
 
     public function ReadByAll() {
         return ProductModel::all();
     }
 
-    public function Update(Int $id, Array $attr) {
-
+    public function Update(Int $id, ProductDto $attr) {
+        $productModel = new ProductModel();
+        $productModel->id =           $attr->id;
+        $productModel->name =         $attr->name;
+        $productModel->description =  $attr->description;
+        $productModel->price =        $attr->price;
+        $productModel->stock =        $attr->stock;
+        $productModel->category_id  = $attr->category_id;
+        $productModel->status_id    = $attr->status_id;
+        $productModel->updated_at   = date("Y-m-d H:i:s");
+        $productModel->save();
     }
 
-    public function Delete(Int $id) {
-
+    public function Delete(Int $id, ProductDto $attr) {
+        $category = ProductModel::find($id);
+        $category->deleted_at = $attr->deleted_at;
+        $category->save();
+        return $attr;
     }
 
 }

@@ -10,7 +10,6 @@ use App\Domain\BusinessEntity\DtoRequest\ProductDto;
 class CategoryRepository {
 
     public function Create(CategoryDto $attr) {
-
         $categoryData = new CategoryModel(); 
         $categoryData->name = $attr->name;
         $categoryData->description = $attr->description;
