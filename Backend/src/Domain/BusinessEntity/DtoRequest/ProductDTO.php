@@ -14,4 +14,9 @@ class ProductDto {
     public $created_at;
     public $updated_at;
 
+    public function __construct()
+    {
+        $this->id = 0;
+    }
+
 }

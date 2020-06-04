@@ -10,6 +10,7 @@ class OperationResult {
 
     public $data;
     public $error;
+    public $message;
     private $response;
 
     public function __construct($data, Response $response)
@@ -35,7 +36,8 @@ class OperationResult {
     public function BadRequest() {
         $responseDto = new ResponseDTO();
         $responseDto->status = 400;
-        $responseDto->error = 'BadRequest';
+        $responseDto->error = true;
+        $responseDto->message = 'Bad Request 400';
         return $this->response->withStatus(400)->withJson($responseDto);
     }
 
@@ -53,6 +55,8 @@ class OperationResult {
 
     public function NotFound() {
         $responseDto = new ResponseDTO();
+        $responseDto->status = 404;
+        $responseDto->message = $this->message;
         $responseDto->data = $this->data;
         return $this->response->withStatus(404)->withJson($responseDto);
     }

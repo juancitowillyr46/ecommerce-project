@@ -4,14 +4,14 @@ namespace App\Common;
 
 class ResponseDTO {
     public $message;
-    public $data = [];
+    public $data = null;
     public $status;
     public $error;
 
     public function __construct()
     {
         $this->message = '';
-        $this->error = '';
+        $this->error = false;
     }
 
 }
