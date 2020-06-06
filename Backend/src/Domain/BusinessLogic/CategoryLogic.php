@@ -2,66 +2,149 @@
 
 namespace App\Domain\BusinessLogic;
 
-use App\Data\Repository\CategoryRepository;
-use App\Data\Repository\ProductRepository;
-use App\Domain\BusinessEntity\DtoRequest\CategoryDto;
-use App\Domain\BusinessEntity\DtoRequest\ProductDto;
+use App\Data\Repositories\CategoryRepository;
+use App\Domain\BusinessEntities\DtoRequest\CategoryDto;
+use App\Domain\BusinessEntities\DtoResponse\CategoryDtoResponse;
+use Exception;
 
 class CategoryLogic {
 
 
-    private $categoryRepository_;
+    private $categoryRepository;
 
     public function __construct(CategoryRepository $categoryRepository)
     {
-        $this->categoryRepository_ = $categoryRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
-    public function Create(Array $attr) {
+    public function Create(Array $attr): Bool {
 
-        $categoryDto = new CategoryDto();
-        $categoryDto->id =           $attr['id'];
-        $categoryDto->name =         $attr['name'];
-        $categoryDto->description =  $attr['description'];
-        $categoryDto->slug =         $attr['slug'];
-        $categoryDto->image =        $attr['image'];
-        $categoryDto->created_at =   date("Y-m-d H:i:s");
-        $categoryDto->updated_at =   date("Y-m-d H:i:s");
+        try {
 
-        $save = $this->categoryRepository_->Create($categoryDto);
+            $categoryDto = new CategoryDto();
+            $categoryDto->id =           $attr['id'];
+            $categoryDto->name =         $attr['name'];
+            $categoryDto->description =  $attr['description'];
+            $categoryDto->slug =         $attr['slug'];
+            $categoryDto->image =        $attr['image'];
+            $categoryDto->created_at =   date("Y-m-d H:i:s");
+            $success = $this->categoryRepository->Create($categoryDto);
+            return $success;
+            
+        } catch (Exception $e) {
 
-        return $save;
+            throw new Exception($e->getMessage());
+
+        }
+
     }
 
-    public function ReadById(Int $id) {
-        $read = $this->categoryRepository_->ReadById($id);
-        return $read;
+    public function ReadById(Int $id): CategoryDtoResponse {
+
+        try {
+
+
+            $categoryDto = new CategoryDtoResponse();
+            $categoryData = $this->categoryRepository->ReadById($id);
+            if(!$categoryData){
+                return $categoryDto;
+            }
+
+            if($categoryDto) {
+                $categoryDto->id = $categoryData->id;
+                $categoryDto->name = $categoryData->name;
+                $categoryDto->description = $categoryData->description;
+                $categoryDto->slug = $categoryData->slug;
+                $categoryDto->image = $categoryData->image;
+                $categoryDto->state = $categoryData->stateAudit->name;
+            }
+
+            return $categoryDto;
+
+        } catch(Exception $e) {
+
+            throw new Exception($e->getMessage());
+
+        }
+
     }
 
-    public function ReadAll() {
-        $all = $this->categoryRepository_->ReadByAll();
-        return $all;
+    public function ReadAll(): Array {
+
+        try {
+
+            $categoriesData = $this->categoryRepository->ReadByAll();
+            $categories = [];
+            foreach ($categoriesData as $categoryData) {
+                $categoryDto = new CategoryDtoResponse();
+                $categoryDto->id = $categoryData->id;
+                $categoryDto->name = $categoryData->name;
+                $categoryDto->description = $categoryData->description;
+                $categoryDto->slug = $categoryData->slug;
+                $categoryDto->image = $categoryData->image;
+                $categoryDto->state = $categoryData->stateAudit->name;
+                $categories[] = $categoryDto;
+            }
+
+            return $categories;
+
+        } catch (Exception $e) {
+
+            throw new Exception($e->getMessage());
+
+        }
+
     }
 
-    public function Update(Int $id, Array $attr) {
+    public function Update(Int $id, Array $attr): Bool {
 
-        $categoryDto = new CategoryDto();
-        $categoryDto->id =           $attr['id'];
-        $categoryDto->name =         $attr['name'];
-        $categoryDto->description =  $attr['description'];
-        $categoryDto->slug =         $attr['slug'];
-        $categoryDto->image =        $attr['image'];
-        $categoryDto->updated_at =   date("Y-m-d H:i:s");
+        try {
 
-        $update = $this->categoryRepository_->Update($id, $categoryDto);
-        return $update;
+            $categoryDto = new CategoryDto();
+            $categoryData = $this->categoryRepository->ReadById($id);
+            if(!$categoryData){
+                return $categoryDto;
+            }
+
+            $categoryDto->id =           $attr['id'];
+            $categoryDto->name =         $attr['name'];
+            $categoryDto->description =  $attr['description'];
+            $categoryDto->slug =         $attr['slug'];
+            $categoryDto->image =        $attr['image'];
+            $categoryDto->updated_at =   date("Y-m-d H:i:s");
+            $categoryDto->state_audit_id =  $attr['state_audit_id'];
+            $success = $this->categoryRepository->Update($id, $categoryDto);
+            return $success;
+
+        } catch (Exception $e) {
+
+            throw new Exception($e->getMessage());
+
+        }
+        
     }
 
-    public function Delete(Int $id) {
-        $categoryDto = new CategoryDto();
-        $categoryDto->deleted_at = date("Y-m-d H:i:s");
-        $update = $this->categoryRepository_->Delete($id, $categoryDto);
-        return $update;
+    public function Delete(Int $id): Bool {
+        
+        try {
+
+            $categoryDto = new CategoryDto();
+            $categoryData = $this->categoryRepository->ReadById($id);
+            if(!$categoryData){
+                return false;
+            }
+
+            $categoryDto->deleted_at = date("Y-m-d H:i:s");
+            $update = $this->categoryRepository->Delete($id, $categoryDto);
+            return $update;
+
+        } catch (Exception $e) {
+
+            throw new Exception($e->getMessage());
+
+        }
+
+
     }
 
 

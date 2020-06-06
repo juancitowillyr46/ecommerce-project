@@ -2,9 +2,9 @@
 
 namespace App\Domain\BusinessLogic;
 
-use App\Data\Repository\ProductRepository;
-use App\Domain\BusinessEntity\DtoRequest\ProductDto;
-use App\Domain\BusinessEntity\DtoResponse\ProductDtoResponse;
+use App\Data\Repositories\ProductRepository;
+use App\Domain\BusinessEntities\DtoRequest\ProductDto;
+use App\Domain\BusinessEntities\DtoResponse\ProductDtoResponse;
 use Exception;
 
 class ProductLogic {
@@ -30,6 +30,7 @@ class ProductLogic {
             $productDto->category_id =  $attr['category_id'];
             $productDto->status_id =    $attr['status_id'];
             $productDto->created_at =   date("Y-m-d H:i:s");
+            $productDto->image =  $attr['image'];
             $success = $this->productRepository->Create($productDto);
             return $success;
 
@@ -45,8 +46,12 @@ class ProductLogic {
 
         try {
 
-            $productData = $this->productRepository->ReadById($id);
             $productDto = new ProductDtoResponse();
+            $productData = $this->productRepository->ReadById($id);
+            if(!$productData){
+                return $productDto;
+            }
+            
             if($productData) {
                 $productDto->id = $productData->id;
                 $productDto->name = $productData->name;
@@ -54,6 +59,8 @@ class ProductLogic {
                 $productDto->stock = $productData->stock;
                 $productDto->price = $productData->price;
                 $productDto->category = $productData->category->name;
+                $productDto->state = $productData->stateAudit->name;
+                $productDto->image = $productData->image;
             }
 
             return $productDto;
@@ -77,6 +84,8 @@ class ProductLogic {
             $productDto->stock = $productData->stock;
             $productDto->price = floatval($productData->price);
             $productDto->category = $productData->category->name;
+            $productDto->state = $productData->stateAudit->name;
+            $productDto->image = $productData->image;
             $products[] = $productDto;
         }
         return $products;
@@ -86,13 +95,12 @@ class ProductLogic {
 
         try {
 
-            $success = false;
+            $productDto = new ProductDto();
             $productData = $this->productRepository->ReadById($id);
             if(!$productData){
-                return $success;
+                return false;
             }
 
-            $productDto = new ProductDto();
             $productDto->id =           $attr['id'];
             $productDto->name =         $attr['name'];
             $productDto->description =  $attr['description'];
@@ -101,6 +109,8 @@ class ProductLogic {
             $productDto->category_id =  $attr['category_id'];
             $productDto->status_id =    $attr['status_id'];
             $productDto->updated_at =   date("Y-m-d H:i:s");
+            $productDto->state_audit_id =  $attr['state_audit_id'];
+            $productDto->image =  $attr['image'];
             $success = $this->productRepository->Update($id, $productDto);
             return $success;
             
@@ -117,13 +127,12 @@ class ProductLogic {
 
         try {
             
-            $success = false;
+            $productDto = new ProductDto();
             $productData = $this->productRepository->ReadById($id);
             if(!$productData){
-                return $success;
+                return $productDto;
             }
 
-            $productDto = new ProductDto();
             $productDto->deleted_at = date("Y-m-d H:i:s");
             $success = $this->productRepository->Delete($id, $productDto);
             return $success;

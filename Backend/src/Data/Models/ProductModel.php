@@ -10,4 +10,8 @@ class ProductModel extends \Illuminate\Database\Eloquent\Model {
         return $this->belongsTo('App\Data\Models\CategoryModel', 'category_id', 'id');
     }
 
+    public function stateAudit()
+    {
+        return $this->belongsTo('App\Data\Models\StateAuditModel', 'state_audit_id', 'id');
+    }
 }

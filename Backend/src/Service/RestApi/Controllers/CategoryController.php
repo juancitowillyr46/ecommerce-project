@@ -2,49 +2,146 @@
 
 namespace App\Service\RestApi\Controllers;
 
-use App\Domain\BusinessEntity\DtoRequest\ProductDto;
+use App\Common\OperationResult;
 use App\Domain\BusinessLogic\CategoryLogic;
-use App\Domain\BusinessLogic\ProductLogic;
-
+use Exception;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 
 class CategoryController {
 
-    private $categoryLogic_; 
+    private $categoryLogic; 
 
     public function __construct(CategoryLogic $categoryLogic)
     {
-        $this->categoryLogic_ = $categoryLogic;
+        $this->categoryLogic = $categoryLogic;
     }
 
-    public function Create(ServerRequest $request, Response $response) {
+    public function Create(ServerRequest $request, Response $response): Response {
 
         $requestData = (array) $request->getParsedBody();
-        $operationResut = $this->categoryLogic_->Create($requestData);
-        return $response->withJson(['message' => 'POST', 'data' => $operationResut]);
+        $logic = null;
+
+        $operationResult = new OperationResult($logic, $response);
+        
+        try { 
+
+            $logic = $this->categoryLogic->Create($requestData);
+            $operationResult->data = $logic;
+            $httpResponse = $operationResult->Created();
+
+        } catch (Exception $e) {
+
+            $httpResponse = $operationResult->BadRequest();
+        }
+
+        return $httpResponse;
+        
 
     }
 
-    public function ReadById(ServerRequest $request, Response $response, array $args = []) {
-        $operationResult = $this->categoryLogic_->ReadById((int) $args['id']);
-        return $response->withJson(['message' => 'GET', 'data' => $operationResult]);
+    public function ReadById(ServerRequest $request, Response $response, array $args = []): Response {
+
+        $logic = null;
+        $operationResult = new OperationResult($logic, $response);
+
+        try {
+
+            $logic = $this->categoryLogic->ReadById((int) $args['id']);
+            if($logic->id == 0){
+                $operationResult->message = 'Categoria no encontrada';
+                $httpResponse = $operationResult->NotFound();
+            } else {
+                $operationResult->data = $logic;
+                $httpResponse = $operationResult->Ok();
+            }
+
+        } catch (Exception $e) {
+
+            $httpResponse = $operationResult->BadRequest();
+
+        }
+
+        return $httpResponse;
+
     }
 
-    public function ReadAll(ServerRequest $request, Response $response) {
-        $operationResut = $this->categoryLogic_->ReadAll();
-        return $response->withJson(['message' => 'GET', 'data' => $operationResut]);
+    public function ReadAll(ServerRequest $request, Response $response): Response {
+
+        $logic = null;
+        $operationResult = new OperationResult($logic, $response);
+
+        try {
+
+            $logic = $this->categoryLogic->ReadAll();
+            if(count($logic) == 0){
+                $operationResult->message = 'No existen categorias';
+                $httpResponse = $operationResult->NotFound();
+            } else {
+                $operationResult->data = $logic;
+                $httpResponse = $operationResult->Ok();
+            }
+
+        } catch (Exception $e) {
+
+            $httpResponse = $operationResult->BadRequest();
+
+        }
+
+        return $httpResponse;
+
     }
 
     public function Update(ServerRequest $request, Response $response, array $args = []) {
+
         $requestData = (array) $request->getParsedBody();
-        $operationResult = $this->categoryLogic_->Update((int) $args['id'], $requestData);
-        return $response->withJson(['message' => 'PUT', 'data' => $operationResult]);
+        $logic = null;
+
+        $operationResult = new OperationResult($logic, $response);
+        
+        try { 
+
+            $logic = $this->categoryLogic->Update((int) $args['id'], $requestData);
+            if($logic == false){
+                $operationResult->message = 'Categoria no encontrado';
+                $httpResponse = $operationResult->NotFound();
+            } else {
+                $operationResult->data = $logic;
+                $httpResponse = $operationResult->Ok();
+            }
+
+        } catch (Exception $e) {
+
+            $httpResponse = $operationResult->BadRequest();
+        }
+
+        return $httpResponse;
+
     }
 
     public function Delete(ServerRequest $request, Response $response, array $args = []) {
-        $operationResult = $this->categoryLogic_->Delete((int) $args['id']);
-        return $response->withJson(['message' => 'DELETE', 'data' => $operationResult]);
+
+        $logic = null;
+        $operationResult = new OperationResult($logic, $response);
+
+        try { 
+
+            $logic = $this->categoryLogic->Delete((int) $args['id']);
+            if($logic == false){
+                $operationResult->message = 'Categoria no encontrado';
+                $httpResponse = $operationResult->NotFound();
+            } else {
+                $operationResult->data = $logic;
+                $httpResponse = $operationResult->Ok();
+            }
+
+        } catch (Exception $e) {
+
+            $httpResponse = $operationResult->BadRequest();
+        }
+
+        return $httpResponse;
+
     }
     
 }

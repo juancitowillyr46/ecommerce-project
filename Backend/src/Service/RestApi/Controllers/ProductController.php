@@ -3,7 +3,6 @@
 namespace App\Service\RestApi\Controllers;
 
 use App\Common\OperationResult;
-use App\Domain\BusinessEntity\DtoRequest\ProductDto;
 use App\Domain\BusinessLogic\ProductLogic;
 use Exception;
 use Slim\Http\Response;

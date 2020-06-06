@@ -1,22 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace App\Domain\BusinessEntity\DtoRequest;
+namespace App\Domain\BusinessEntities\DtoRequest;
 
-class ProductDto {
-
+class CategoryDto {
     public $id;
     public $name;
     public $description;
-    public $price;
-    public $stock;
-    public $category_id;
-    public $status_id;
+    public $slug;
+    public $image;
     public $created_at;
     public $updated_at;
+    public $deleted_at;
+    public $state_audit_id;
 
     public function __construct()
     {
         $this->id = 0;
+        $this->state_audit_id = 1;
     }
-
 }

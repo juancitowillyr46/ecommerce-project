@@ -10,10 +10,9 @@ class ProductDtoResponse {
     public $price;
     public $stock;
     public $category;
-    // public $status_id;
-    // public $created_at;
-    // public $updated_at;
-
+    public $state;
+    public $image;
+    
     public function __construct()
     {
         $this->id = 0;
