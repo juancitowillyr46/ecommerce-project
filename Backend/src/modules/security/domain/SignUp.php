@@ -1,11 +1,12 @@
 <?php
 
 
-namespace App\modules\users\domain;
+namespace App\modules\security\domain;
 
 
-class User
+class SignUp
 {
+    public $id;
     public $username;
     public $password;
     public $email;
