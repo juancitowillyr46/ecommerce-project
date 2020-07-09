@@ -16,13 +16,14 @@ class SignUpController extends BaseController
     }
 
     protected function execute(): Response {
-        $data = $this->request->getParsedBody();
+
         try {
 
+            $data = $this->request->getParsedBody();
             $execute = $this->signUpUseCase->execute(new SignUpDTO($data));
             return $this->Ok($execute);
 
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
 
             return $this->BadRequest($e->getMessage());
         }

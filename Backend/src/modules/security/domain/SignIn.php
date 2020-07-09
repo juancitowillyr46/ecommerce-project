@@ -7,14 +7,17 @@ namespace App\modules\security\domain;
 class SignIn
 {
 
-    public function __construct(array $getParsedBody)
+    public function __construct()
     {
-        $this->username = $getParsedBody['username'];
-        $this->password = $getParsedBody['password'];
+        $this->id = 0;
     }
+
+    public $id;
 
     public $username;
 
     public $password;
+
+    public $email;
 
 }

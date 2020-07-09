@@ -3,25 +3,33 @@
 
 namespace App\modules\security\application;
 
+use App\core\infrastructure\security\EncryptPassword;
 use App\modules\security\domain\ISignUpRepository;
 use Exception;
 class SignUpUseCase
 {
-    private $signInRepository;
+    private $signUpRepository;
 
     public function __construct(ISignUpRepository $ISignUpRepository)
     {
-        $this->signInRepository = $ISignUpRepository;
+        $this->signUpRepository = $ISignUpRepository;
     }
 
-    public function execute(SignUpDTO $signUpDTO) {
+    public function execute(SignUpDTO $signUpDTO): SignUpDTOResponse {
 
-        $exist = $this->signInRepository->isExist($signUpDTO);
+        $exist = $this->signUpRepository->isExistEmail($signUpDTO);
         if($exist == true){
             throw new \Exception('El usuario ya existe');
+        } else {
+
+            $signUpDTO->password = EncryptPassword::encrypt($signUpDTO->password);
+
+            $signUp = $this->signUpRepository->register($signUpDTO);
+
+            $signUpDTOResponse = new SignUpDTOResponse($signUp);
+
         }
 
-
-        return $signUpDTO;
+        return $signUpDTOResponse;
     }
 }

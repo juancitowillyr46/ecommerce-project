@@ -6,6 +6,7 @@ namespace App\modules\security\infrastructure\controllers;
 
 
 use App\core\infrastructure\http\BaseController;
+use App\modules\security\application\SignInDTO;
 use App\modules\security\application\SignInUseCase;
 use App\modules\security\domain\SignIn;
 use Slim\Http\Response;
@@ -20,9 +21,18 @@ class SignInController extends BaseController
     }
 
     protected function execute(): Response {
-        $data = $this->request->getParsedBody();
-        $execute = $this->signInUseCase->execute(new SignIn($data));
-        return $this->Ok($execute);
+
+        try {
+
+            $data = $this->request->getParsedBody();
+            $execute = $this->signInUseCase->execute(new SignInDTO($data));
+            return $this->Ok($execute);
+
+        } catch (\Exception $e) {
+
+            return $this->BadRequest($e->getMessage());
+        }
+
     }
 
 }

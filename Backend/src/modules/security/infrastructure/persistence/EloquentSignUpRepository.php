@@ -21,9 +21,9 @@ class EloquentSignUpRepository implements ISignUpRepository
         return $signUpSave;
     }
 
-    public function isExist(SignUpDTO $signUpDTO): Bool
+    public function isExistEmail(SignUpDTO $signUpDTO): Bool
     {
-        if($signUpDTO->email === "juan.rodas.manez@gmail.com"){
+        if($signUpDTO->email === "juan.rodas.manez@gmail.com1"){
             return true;
         }
         return false;

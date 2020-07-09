@@ -9,5 +9,5 @@ use App\modules\security\application\SignUpDTO;
 interface ISignUpRepository
 {
     public function register(SignUpDTO $signUp): SignUp;
-    public function isExist(SignUpDTO $signUp): Bool;
+    public function isExistEmail(SignUpDTO $signUp): Bool;
 }
