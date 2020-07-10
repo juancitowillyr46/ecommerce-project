@@ -22,9 +22,9 @@ $app = $container->get(App::class);
 
 
 // Registrando rutas
-/*(require __DIR__ . '/routes.php') ($app);*/
+(require __DIR__ . '/routes.php') ($app);
 
-(require __DIR__ . '/../src/core/infrastructure/http/routes.php') ($app);
+//(require __DIR__ . '/../src/core/Infrastructure/http/routes.php') ($app);
 
 // Registrando middleware
 // (require __DIR__ . '/middlewares.php') ($app);

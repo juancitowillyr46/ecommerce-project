@@ -1,14 +1,13 @@
 <?php
 declare(strict_types=1);
 
-
-
 use DI\ContainerBuilder;
 
 return function (ContainerBuilder $containerBuilder) {
-    // Here we map our UserRepository interface to its in memory implementation
     $containerBuilder->addDefinitions([
-        \App\modules\security\domain\ISignUpRepository::class => \DI\autowire(\App\modules\security\infrastructure\persistence\EloquentSignUpRepository::class),
-        \App\modules\security\domain\ISignInRepository::class => \DI\autowire(\App\modules\security\infrastructure\persistence\EloquentSignInRepository::class),
+        \App\Modules\SignIn\Domain\SignInRepository::class => \DI\autowire(\App\Modules\SignIn\Infrastructure\Persistence\EloquentSignInRepository::class),
+        \App\Modules\SignUp\Domain\SignUpRepository::class => \DI\autowire(\App\Modules\SignUp\Infrastructure\Persistence\EloquentSignUpRepository::class),
+
+        \App\Modules\Users\Domain\Repositories\UsersRepository::class => \DI\autowire(\App\Modules\Users\Infrastructure\Persistence\EloquentUsersRepository::class)
     ]);
 };
