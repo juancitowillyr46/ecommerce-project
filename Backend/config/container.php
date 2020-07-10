@@ -26,7 +26,7 @@ return [
             'flags' => [
                 // Turn off persistent connections
                 PDO::ATTR_PERSISTENT => false,
-                // Enable exceptions
+                // Enable Exceptions
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 // Emulate prepared statements
                 PDO::ATTR_EMULATE_PREPARES => true,

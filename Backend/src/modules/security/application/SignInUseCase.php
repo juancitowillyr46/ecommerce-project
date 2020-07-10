@@ -5,6 +5,8 @@ namespace App\modules\security\application;
 
 use App\core\infrastructure\security\EncryptPassword;
 use App\modules\security\domain\ISignInRepository;
+use App\modules\security\domain\SignInNotExistException;
+use App\modules\security\domain\SignInPasswordIncorrectException;
 
 class SignInUseCase
 {
@@ -20,13 +22,13 @@ class SignInUseCase
         $signIn = $this->signInRepository->findUserByUsername($signInDTO);
 
         if($signIn->id == 0){
-            throw new \Exception('El usuario no existe');
+            throw new SignInNotExistException('El usuario no existe');
         } else {
 
             $verifyPassword = EncryptPassword::verify($signInDTO->password, $signIn->password);
 
             if(!$verifyPassword) {
-                throw new \Exception('El password es incorrecto');
+                throw new SignInPasswordIncorrectException('El password es incorrecto');
             } else {
                 $signInDTOResponse = new SignInDTOResponse($signIn);
             }
