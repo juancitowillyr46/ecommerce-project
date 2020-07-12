@@ -1,23 +1,24 @@
 <?php
-
-
 namespace App\Modules\Users\Application;
-
 
 class UserDTORequest
 {
-    public Int $id;
-    public String $username;
-    public String $password;
-    public String $email;
-    public Bool $status;
+    public int $id;
+    public string $username;
+    public string $password;
+    public string $email;
+    public int $statusId;
+    public bool $active;
+    public int $roleId;
 
     public function __construct(array $data)
     {
-        $this->id = (Int) $data['id'];
+        $this->id = $data['id'];
         $this->username = $data['username'];
         $this->password = $data['password'];
         $this->email = $data['email'];
-        $this->status = $data['status'];
+        $this->statusId = $data['statusId'];
+        $this->active = $data['active'];
+        $this->roleId = $data['roleId'];
     }
 }

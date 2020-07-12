@@ -1,0 +1,3 @@
+[2020-07-11T19:28:58.205371-05:00] APP_WEB.ERROR: Typed property App\Modules\Roles\Application\RoleDTORequest::$id must be int, string used [] []
+[2020-07-11T19:29:21.794754-05:00] APP_WEB.ERROR: Typed property App\Modules\Roles\Application\RoleDTORequest::$id must be int, string used - 0 - D:\xampp\htdocs\ecommerce-project\Backend\src\Modules\Roles\Application\RoleDTORequest.php [] []
+[2020-07-11T19:29:52.615166-05:00] APP_WEB.ERROR: Typed property App\Modules\Roles\Application\RoleDTORequest::$id must be int, string used - 0 - D:\xampp\htdocs\ecommerce-project\Backend\src\Modules\Roles\Application\RoleDTORequest.php - 32 [] []

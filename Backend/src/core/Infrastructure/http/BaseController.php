@@ -1,6 +1,11 @@
 <?php
 namespace App\Core\Infrastructure\Http;
 
+use DI\Container;
+use DI\DependencyException;
+use DI\NotFoundException;
+use Monolog\Logger;
+use Psr\Container\ContainerInterface;
 use Slim\Http\ServerRequest;
 use Slim\Http\Response;
 
@@ -8,7 +13,17 @@ abstract class BaseController
 {
     protected ServerRequest $request;
     protected Response $response;
+    protected Logger $logger;
     protected array $args = [];
+
+    public function __construct(Container $container)
+    {
+        try {
+            $this->logger = $container->get(Logger::class);
+        } catch (DependencyException $e) {
+        } catch (NotFoundException $e) {
+        }
+    }
 
     abstract protected function execute(): Response;
 
@@ -19,8 +34,25 @@ abstract class BaseController
         return $this->execute();
     }
 
-    public function responseJson(): Response {
-        return $this->response->withStatus(200)->withJson(array("username" => "Juan"));
+    public function getParsedBody(): array {
+        try {
+            return $this->request->getParsedBody();
+        } catch (\Error $e){
+            $concat = $e->getMessage() .' - '.  $e->getCode() .' - '. $e->getFile();
+            $this->logger->error($concat);
+            return [];
+        }
+    }
+
+    public function getArgs(): array {
+        try {
+            return $this->args;
+        } catch (\Error $e){
+            $concat = $e->getMessage() .' - '.  $e->getCode() .' - '. $e->getFile();
+            $this->logger->error($concat);
+            return [];
+        }
+
     }
 
     public function Ok($data) {
@@ -43,8 +75,9 @@ abstract class BaseController
         return $this->response->withStatus(404)->withJson($message);
     }
 
-    public function ServerError($message) {
-        return $this->response->withStatus(500)->withJson($message);
+    public function ServerError($message = 'Interval server error') {
+        return $this->response->withStatus(500)->withJson(array("message" => $message));
     }
+
 
 }

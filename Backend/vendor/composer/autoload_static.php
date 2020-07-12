@@ -59,6 +59,10 @@ class ComposerStaticInitfa131c10aa53c1b1ca636f4d2b80ddd0
         array (
             'Opis\\Closure\\' => 13,
         ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
+        ),
         'I' => 
         array (
             'Invoker\\' => 8,
@@ -188,6 +192,10 @@ class ComposerStaticInitfa131c10aa53c1b1ca636f4d2b80ddd0
         'Opis\\Closure\\' => 
         array (
             0 => __DIR__ . '/..' . '/opis/closure/src',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
         'Invoker\\' => 
         array (

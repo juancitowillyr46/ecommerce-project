@@ -18,7 +18,7 @@ class EloquentUsersRepository implements UsersRepository
         $user->username = $userDTORequest->username;
         $user->password = $userDTORequest->password;
         $user->email = $userDTORequest->email;
-        $user->status = $userDTORequest->status;
+        $user->status_id = $userDTORequest->statusId;
         return $user;
     }
 
