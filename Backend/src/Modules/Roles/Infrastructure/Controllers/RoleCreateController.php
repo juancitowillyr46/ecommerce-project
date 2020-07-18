@@ -2,16 +2,16 @@
 namespace App\Modules\Roles\Infrastructure\Controllers;
 
 use App\Core\Infrastructure\Http\BaseController;
-use App\Modules\Roles\Application\RoleCreateUseCase;
+use App\Modules\Roles\Application\RoleAddUseCase;
 use DI\Container;
 use Monolog\Logger;
 use Slim\Http\Response;
 
 class RoleCreateController extends BaseController
 {
-    private RoleCreateUseCase $roleUseCase;
+    private RoleAddUseCase $roleUseCase;
 
-    public function __construct(RoleCreateUseCase $roleUseCase, Container $container)
+    public function __construct(RoleAddUseCase $roleUseCase, Container $container)
     {
         parent::__construct($container);
         $this->roleUseCase = $roleUseCase;

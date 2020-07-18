@@ -1,11 +1,10 @@
 <?php
 namespace App\Modules\Roles\Application;
 
-use App\Core\Application\UseCase;
 use App\Modules\Roles\Domain\RoleRepository;
 use Monolog\Logger;
 
-class RoleCreateUseCase
+class RoleAddUseCase
 {
     private RoleRepository $roleRepository;
     private Logger $logger;
@@ -16,12 +15,12 @@ class RoleCreateUseCase
         $this->logger = $logger;
     }
 
-    public function execute(RoleDTORequest $roleDTORequest): RoleDTOResponse
+    public function execute(RoleDTORequest $roleDTORequest): RoleDTOResponseData
     {
         try
         {
             $role = $this->roleRepository->create($roleDTORequest);
-            return new RoleDTOResponse($role);
+            return new RoleDTOResponseData($role);
 
         } catch (\Exception $e)
         {

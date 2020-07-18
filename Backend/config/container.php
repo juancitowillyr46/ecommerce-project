@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 //use App\Domain\Security\Service\JwtCustom;
+use App\Core\Application\UseCaseInterface;
 use Psr\Container\ContainerInterface;
 use Selective\Config\Configuration;
 use Slim\App;
@@ -53,11 +54,20 @@ return [
         
         return $app;
     },
-    \Monolog\Logger::class => function(ContainerInterface $container)
+    \Psr\Log\LoggerInterface::class => function(ContainerInterface $container)
     {
         $config = $container->get(Configuration::class);
         $logger = new Monolog\Logger("APP_WEB");
         $logger->pushHandler(new \Monolog\Handler\StreamHandler(__DIR__.'/../logs/app.log', \Monolog\Logger::DEBUG));
         return $logger;
+    },
+    \AutoMapperPlus\AutoMapperInterface::class => function(ContainerInterface $container)
+    {
+        $config = new \AutoMapperPlus\Configuration\AutoMapperConfig();
+        return new \AutoMapperPlus\AutoMapper($config);
+    },
+    \Respect\Validation\Validator::class => function(ContainerInterface $container)
+    {
+        return new \Respect\Validation\Validator();
     }
 ];

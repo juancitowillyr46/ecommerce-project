@@ -6,7 +6,7 @@ use Slim\App;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $containerBuilder = new ContainerBuilder();
-
+$containerBuilder->useAutowiring(true);
 // Setup de configuraciones
 $containerBuilder->addDefinitions(__DIR__ . '/container.php');
 

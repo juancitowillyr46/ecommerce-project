@@ -3,16 +3,16 @@ namespace App\Modules\Roles\Infrastructure\Controllers;
 
 
 use App\Core\Infrastructure\Http\BaseController;
-use App\Modules\Roles\Application\RoleUpdateUseCase;
+use App\Modules\Roles\Application\RoleEditUseCase;
 use DI\Container;
 use Monolog\Logger;
 use Slim\Http\Response;
 
 class RoleUpdateController extends BaseController
 {
-    private RoleUpdateUseCase $roleUseCase;
+    private RoleEditUseCase $roleUseCase;
 
-    public function __construct(RoleUpdateUseCase $roleUseCase, Container $container)
+    public function __construct(RoleEditUseCase $roleUseCase, Container $container)
     {
         parent::__construct($container);
         $this->roleUseCase = $roleUseCase;

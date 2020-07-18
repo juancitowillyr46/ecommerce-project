@@ -19,6 +19,7 @@ class ComposerStaticInitfa131c10aa53c1b1ca636f4d2b80ddd0
         '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
         '538ca81a9a966a6716601ecf48f4eaef' => __DIR__ . '/..' . '/opis/closure/functions.php',
+        '2df68f9e79c919e2d88506611769ed2e' => __DIR__ . '/..' . '/respect/stringifier/src/stringify.php',
         'b33e3d135e5d9e47d845c576147bda89' => __DIR__ . '/..' . '/php-di/php-di/src/functions.php',
     );
 
@@ -40,10 +41,16 @@ class ComposerStaticInitfa131c10aa53c1b1ca636f4d2b80ddd0
             'Symfony\\Component\\Translation\\' => 30,
             'Symfony\\Component\\String\\' => 25,
             'Symfony\\Component\\Console\\' => 26,
+            'Spatie\\DataTransferObject\\' => 26,
             'Slim\\Psr7\\' => 10,
             'Slim\\Http\\' => 10,
             'Slim\\' => 5,
             'Selective\\Config\\' => 17,
+        ),
+        'R' => 
+        array (
+            'Respect\\Validation\\' => 19,
+            'Respect\\Stringifier\\' => 20,
         ),
         'P' => 
         array (
@@ -62,6 +69,10 @@ class ComposerStaticInitfa131c10aa53c1b1ca636f4d2b80ddd0
         'M' => 
         array (
             'Monolog\\' => 8,
+        ),
+        'J' => 
+        array (
+            'Jawira\\CaseConverter\\' => 21,
         ),
         'I' => 
         array (
@@ -90,6 +101,7 @@ class ComposerStaticInitfa131c10aa53c1b1ca636f4d2b80ddd0
         ),
         'A' => 
         array (
+            'AutoMapperPlus\\' => 15,
             'App\\' => 4,
         ),
     );
@@ -143,6 +155,10 @@ class ComposerStaticInitfa131c10aa53c1b1ca636f4d2b80ddd0
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
         ),
+        'Spatie\\DataTransferObject\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/data-transfer-object/src',
+        ),
         'Slim\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/slim/psr7/src',
@@ -158,6 +174,14 @@ class ComposerStaticInitfa131c10aa53c1b1ca636f4d2b80ddd0
         'Selective\\Config\\' => 
         array (
             0 => __DIR__ . '/..' . '/selective/config/src',
+        ),
+        'Respect\\Validation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/respect/validation/library',
+        ),
+        'Respect\\Stringifier\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/respect/stringifier/src',
         ),
         'Psr\\SimpleCache\\' => 
         array (
@@ -196,6 +220,10 @@ class ComposerStaticInitfa131c10aa53c1b1ca636f4d2b80ddd0
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Jawira\\CaseConverter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jawira/case-converter/src',
         ),
         'Invoker\\' => 
         array (
@@ -249,6 +277,10 @@ class ComposerStaticInitfa131c10aa53c1b1ca636f4d2b80ddd0
         array (
             0 => __DIR__ . '/..' . '/cakephp/chronos/src',
         ),
+        'AutoMapperPlus\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mark-gerarts/auto-mapper-plus/src',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
@@ -259,6 +291,7 @@ class ComposerStaticInitfa131c10aa53c1b1ca636f4d2b80ddd0
         'JsonException' => __DIR__ . '/..' . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );
 

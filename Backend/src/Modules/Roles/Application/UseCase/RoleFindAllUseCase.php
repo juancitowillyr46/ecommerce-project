@@ -7,7 +7,7 @@ namespace App\Modules\Roles\Application;
 use App\Modules\Roles\Domain\RoleRepository;
 use Monolog\Logger;
 
-class RoleReadUseCase
+class RoleFindAllUseCase
 {
     private RoleRepository $roleRepository;
     private Logger $logger;
@@ -18,12 +18,18 @@ class RoleReadUseCase
         $this->logger = $logger;
     }
 
-    public function execute(RoleDTORequest $roleDTORequest): RoleDTOResponse
+    public function execute(RoleDTORequest $roleDTORequest): array
     {
         try
         {
-            $role = $this->roleRepository->readById($roleDTORequest->id);
-            return new RoleDTOResponse($role);
+            $roles = $this->roleRepository->all($roleDTORequest);
+            $roleCollection = [];
+
+            foreach ($roles as $role) {
+                $roleCollection[] = new RoleDTOResponseData($role);
+            }
+
+            return $roleCollection;
 
         } catch (\Exception $e)
         {

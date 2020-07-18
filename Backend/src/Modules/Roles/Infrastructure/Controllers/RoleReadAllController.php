@@ -3,16 +3,16 @@ namespace App\Modules\Roles\Infrastructure\Controllers;
 
 use App\Core\Infrastructure\Http\BaseController;
 use App\Modules\Roles\Application\RoleDTORequest;
-use App\Modules\Roles\Application\RoleReadAllUseCase;
-use App\Modules\Roles\Application\RoleReadUseCase;
+use App\Modules\Roles\Application\RoleFindAllUseCase;
+use App\Modules\Roles\Application\RoleFindUseCase;
 use DI\Container;
 use Slim\Http\Response;
 
 class RoleReadAllController extends BaseController
 {
-    private RoleReadAllUseCase $roleUseCase;
+    private RoleFindAllUseCase $roleUseCase;
 
-    public function __construct(RoleReadAllUseCase $roleUseCase, Container $container)
+    public function __construct(RoleFindAllUseCase $roleUseCase, Container $container)
     {
         parent::__construct($container);
 

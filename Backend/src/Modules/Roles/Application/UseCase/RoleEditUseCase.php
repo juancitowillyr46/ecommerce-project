@@ -7,7 +7,7 @@ namespace App\Modules\Roles\Application;
 use App\Modules\Roles\Domain\RoleRepository;
 use Monolog\Logger;
 
-class RoleUpdateUseCase
+class RoleEditUseCase
 {
     private RoleRepository $roleRepository;
     private Logger $logger;
@@ -18,12 +18,12 @@ class RoleUpdateUseCase
         $this->logger = $logger;
     }
 
-    public function execute(RoleDTORequest $roleDTORequest): RoleDTOResponse
+    public function execute(RoleDTORequest $roleDTORequest): RoleDTOResponseData
     {
         try
         {
             $role = $this->roleRepository->update($roleDTORequest->id, $roleDTORequest);
-            return new RoleDTOResponse($role);
+            return new RoleDTOResponseData($role);
 
         } catch (\Exception $e)
         {

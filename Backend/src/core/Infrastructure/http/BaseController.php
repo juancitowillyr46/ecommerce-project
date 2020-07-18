@@ -1,7 +1,9 @@
 <?php
 namespace App\Core\Infrastructure\Http;
 
-use DI\Container;
+use App\Core\Application\BaseUseCase;
+use App\Core\Application\UseCaseInterface;
+use App\Modules\Roles\Application\RoleRequestDTO;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Monolog\Logger;
@@ -11,27 +13,32 @@ use Slim\Http\Response;
 
 abstract class BaseController
 {
+    /* HTTP */
     protected ServerRequest $request;
+    protected RoleRequestDTO $roleRequestDTO;
     protected Response $response;
-    protected Logger $logger;
     protected array $args = [];
 
-    public function __construct(Container $container)
-    {
-        try {
-            $this->logger = $container->get(Logger::class);
-        } catch (DependencyException $e) {
-        } catch (NotFoundException $e) {
-        }
-    }
+    /* Monitor  */
+    protected Logger $logger;
 
-    abstract protected function execute(): Response;
+    abstract public function execute(): Response;
 
     public function __invoke(ServerRequest $request, Response $response, array $args): Response {
-        $this->request = $request;
-        $this->response = $response;
-        $this->args = $args;
-        return $this->execute();
+
+        try {
+
+            $this->request = $request;
+            $this->response = $response;
+            $this->args = $args;
+            return $this->execute();
+
+        } catch (\Error $er) {
+
+            return $this->BadRequest($er->getMessage());
+
+        }
+
     }
 
     public function getParsedBody(): array {

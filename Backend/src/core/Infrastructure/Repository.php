@@ -1,15 +1,30 @@
 <?php
 namespace App\Core\Infrastructure;
 
-interface Repository
+use App\Core\Application\BaseRequest;
+use DI\Container;
+use DI\DependencyException;
+use DI\NotFoundException;
+
+abstract class Repository
 {
-    public function create(\stdClass $object): \stdClass;
+    private Object $class;
+    private Container $container;
 
-    public function update(Int $id, Object $object): Object;
+    public function __construct(Object $class, Container $container)
+    {
+        $this->class = $class;
 
-    public function readById(Int $id): Object;
+        try {
+            $this->container->get($this->class);
+        } catch (DependencyException $e) {
+        } catch (NotFoundException $e) {
+        }
 
-    public function all(Object $object): array;
+    }
 
-    public function delete(Object $object): Object;
+    public function create(BaseRequest $request): Object
+    {
+       return $this->class;
+    }
 }
