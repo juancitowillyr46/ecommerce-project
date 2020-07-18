@@ -1,7 +1,0 @@
-[2020-07-11T19:28:58.205371-05:00] APP_WEB.ERROR: Typed property App\Modules\Roles\Application\RoleDTORequest::$id must be int, string used [] []
-[2020-07-11T19:29:21.794754-05:00] APP_WEB.ERROR: Typed property App\Modules\Roles\Application\RoleDTORequest::$id must be int, string used - 0 - D:\xampp\htdocs\ecommerce-project\Backend\src\Modules\Roles\Application\RoleDTORequest.php [] []
-[2020-07-11T19:29:52.615166-05:00] APP_WEB.ERROR: Typed property App\Modules\Roles\Application\RoleDTORequest::$id must be int, string used - 0 - D:\xampp\htdocs\ecommerce-project\Backend\src\Modules\Roles\Application\RoleDTORequest.php - 32 [] []
-[2020-07-12T18:05:00.960899-05:00] APP_WEB.ERROR: Typed property App\Modules\Roles\Domain\Role::$name must not be accessed before initialization - 0 - D:\xampp\htdocs\ecommerce-project\Backend\src\Modules\Roles\Application\RoleDTOResponse.php - 20 [] []
-[2020-07-12T18:08:15.380658-05:00] APP_WEB.ERROR: Typed property App\Modules\Roles\Domain\Role::$name must not be accessed before initialization - 0 - D:\xampp\htdocs\ecommerce-project\Backend\src\Modules\Roles\Application\RoleDTOResponse.php - 20 [] []
-[2020-07-15T21:35:49.013458-05:00] APP_WEB.ERROR: Mensaje de error [] []
-[2020-07-16T09:21:52.297129-05:00] APP_WEB.INFO: Cargo [] []

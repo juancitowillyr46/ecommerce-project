@@ -1,4 +1,0 @@
-
-La capa de infraestructura es responsable de la configuración de todos los marcos técnicos que está utilizando en su proyecto. Esto contendrá los controladores REST, la integración con bases de datos SQL y los controladores de mensajería. La capa de infraestructura es la única capa que debe tener dependencias en marcos como Spring, el cliente Kafka, AWS SDK, etc.
-
-Puede proporcionar servicios a la aplicación y la capa de dominio. La capa de dominio o la capa de aplicación pueden definir una interfaz, que se implementa en la capa de infraestructura. Esto se llama principio de inversión de dependencia.
