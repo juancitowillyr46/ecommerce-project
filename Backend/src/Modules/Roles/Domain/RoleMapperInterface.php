@@ -4,9 +4,10 @@
 namespace App\Modules\Roles\Domain;
 
 
+use AutoMapperPlus\AutoMapperInterface;
+
 interface RoleMapperInterface
 {
     public function registerMapping();
-    public function map($source, string $destinationClass);
-    public function mapMultiple($source, string $destinationClass);
+    public function getMapper(): AutoMapperInterface;
 }

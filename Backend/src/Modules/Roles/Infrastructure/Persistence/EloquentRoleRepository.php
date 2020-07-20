@@ -26,12 +26,12 @@ class EloquentRoleRepository implements RoleRepositoryInterface
 
         try {
 
-            $data = (array) $this->roleMapper->map($object, Role::class);
+            $data = (array) $this->roleMapper->getMapper()->map($object, Role::class);
             $roleModel = new RoleModel($data);
 
             if($roleModel->save() == true){
                 $returnData = (object) $roleModel->toArray();
-                return $this->roleMapper->map($returnData, Role::class);
+                return $this->roleMapper->getMapper()->map($returnData, Role::class);
             }
 
         } catch (\Exception $e) {
@@ -45,13 +45,13 @@ class EloquentRoleRepository implements RoleRepositoryInterface
     {
         try {
 
-            $data = (array) $this->roleMapper->map($object, Role::class);
+            $data = (array) $this->roleMapper->getMapper()->map($object, Role::class);
 
             $roleModel = RoleModel::findOrFail($id);
             $success = $roleModel->update($data);
             if($success) {
                 $returnData = (object) $roleModel->toArray();
-                return $this->roleMapper->map($returnData, Role::class);
+                return $this->roleMapper->getMapper()->map($returnData, Role::class);
             }
 
         } catch (\Exception $e) {
@@ -74,7 +74,7 @@ class EloquentRoleRepository implements RoleRepositoryInterface
 
             $roleModel = RoleModel::findOrFail($id);
             $returnData = (object) $roleModel->toArray();
-            return $this->roleMapper->map($returnData, Role::class);
+            return $this->roleMapper->getMapper()->map($returnData, Role::class);
 
         } catch (\Exception $e) {
 
@@ -98,7 +98,7 @@ class EloquentRoleRepository implements RoleRepositoryInterface
             if($roleModel->delete()) {
 
                 $returnData = (object) $roleModel->toArray();
-                return $this->roleMapper->map($returnData, Role::class);
+                return $this->roleMapper->getMapper()->map($returnData, Role::class);
             }
 
         } catch (\Exception $e) {
@@ -121,7 +121,7 @@ class EloquentRoleRepository implements RoleRepositoryInterface
                 $roleModel->create_at = is_null($roleModel->create_at)? '' : $roleModel->create_at;
                 $roleModel->updated_at = is_null($roleModel->updated_at)? '' : $roleModel->updated_at;
                 $returnData = (object) $roleModel->toArray();
-                $roles[] = $this->roleMapper->map($returnData, Role::class);
+                $roles[] = $this->roleMapper->getMapper()->map($returnData, Role::class);
             }
 
         } catch (\Exception $e) {

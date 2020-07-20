@@ -44,21 +44,9 @@ class RoleMapper extends BaseAutoMapper implements RoleMapperInterface
 
     }
 
-    public function map($source, string $destinationClass) {
-        try {
-            return $this->autoMapper->map($source, $destinationClass);
-        } catch (UnregisteredMappingException $e) {
-            throw new \Exception($e);
-        }
-    }
 
-
-    public function mapMultiple($source, string $destinationClass)
+    public function getMapper(): AutoMapperInterface
     {
-        try {
-            return $this->autoMapper->mapMultiple($source, $destinationClass);
-        } catch (UnregisteredMappingException $e) {
-            throw new \Exception($e);
-        }
+        return $this->autoMapper;
     }
 }

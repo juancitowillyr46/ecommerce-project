@@ -12,6 +12,6 @@ class RoleFindAllUseCase extends RoleUseCaseImp implements RoleUseCaseInterface
     {
         $this->logger->info('Entrando al caso de uso');
         $result = $this->roleRepository->findAll();
-        return $this->roleMapper->mapMultiple($result, RoleResponseDTO::class);
+        return $this->roleMapper->getMapper()->mapMultiple($result, RoleResponseDTO::class);
     }
 }

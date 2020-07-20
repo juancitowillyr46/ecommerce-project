@@ -15,6 +15,4 @@ abstract class BaseAutoMapper
         $this->registerMapping();
     }
 
-    abstract public function registerMapping();
-    abstract public function map($source, string $destinationClass);
 }

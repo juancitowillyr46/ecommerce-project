@@ -8,8 +8,6 @@ use App\Modules\Roles\Domain\RoleMapperInterface;
 use App\Modules\Roles\Domain\RoleRequestDTO;
 use App\Modules\Roles\Domain\RoleValidatorInterface;
 use Psr\Log\LoggerInterface;
-use Respect\Validation\Exceptions\NestedValidationException;
-use Respect\Validation\Validator as v;
 use Slim\Http\Response;
 
 class RoleCreateController extends BaseController
@@ -40,7 +38,7 @@ class RoleCreateController extends BaseController
                 return $this->BadRequest($message);
             }
 
-            $result = $this->roleMapper->map($body, RoleRequestDTO::class);
+            $result = $this->roleMapper->getMapper()->map($body, RoleRequestDTO::class);
             $useCase = $this->useCase->__invoke($result);
 
             return $this->Ok($useCase);
@@ -51,28 +49,5 @@ class RoleCreateController extends BaseController
 
         }
     }
-
-//    public function validateParsedBody($body): array
-//    {
-//        $message = [];
-//
-//        try {
-//
-//            $userValidator = v::attribute('id', v::intVal())->
-//            attribute('name', v::notEmpty())->
-//            attribute('active', v::boolVal())->
-//            attribute('description', v::notEmpty());
-//            $userValidator->assert($body);
-//
-//        }  catch(NestedValidationException $e) {
-//
-//            $message = $e->getMessages();
-//
-//        }
-//
-//        return $message;
-//
-//    }
-
 
 }

@@ -39,7 +39,7 @@ class RoleUpdateController extends BaseController
                 return $this->BadRequest($message);
             }
 
-            $result = $this->roleMapper->map($body, RoleRequestDTO::class);
+            $result = $this->roleMapper->getMapper()->map($body, RoleRequestDTO::class);
             $useCase = $this->useCase->__invoke((int) $args->id, $result);
 
             return $this->Ok($useCase);
