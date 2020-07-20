@@ -1,23 +1,21 @@
 <?php
 namespace App\Modules\Roles\Infrastructure\Controllers;
 use App\Core\Infrastructure\Http\BaseController;
-use App\Modules\Roles\Application\IRoleUseCase;
-use App\Modules\Roles\Application\RoleRequestDTO;
-use App\Modules\Roles\Domain\Role;
+use App\Modules\Roles\Application\RoleUseCaseInterface;
+use App\Modules\Roles\Domain\RoleMapperInterface;
+use App\Modules\Roles\Domain\RoleRequestDTO;
 use App\Modules\Roles\Domain\RoleMapper;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as v;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 
-final class RoleIntegratonController extends BaseController
+class RoleIntegratonController extends BaseController
 {
-    public IRoleUseCase $useCase;
-    protected ServerRequest $request;
-    protected Response $response;
-    protected RoleMapper $roleMapper;
+    public RoleUseCaseInterface $useCase;
+    protected RoleMapperInterface $roleMapper;
 
-    public function __construct(IRoleUseCase $useCase, RoleMapper $roleMapper)
+    public function __construct(RoleUseCaseInterface $useCase, RoleMapperInterface $roleMapper)
     {
         $this->roleMapper = $roleMapper;
         $this->useCase = $useCase;
@@ -29,23 +27,13 @@ final class RoleIntegratonController extends BaseController
 
             $body = (object) $this->getParsedBody();
 
-            $userValidator = v::attribute('id', v::intVal())->
-                                attribute('name', v::notEmpty())->
-                                attribute('active', v::boolVal())->
-                                attribute('descriptionRole', v::notEmpty());
-
-
-            $userValidator->assert($body);
+            $this->validateParsedBody($body);
 
             $result = $this->roleMapper->map($body, RoleRequestDTO::class);
 
             $useCase = $this->useCase->execute($result);
 
             return $this->Ok($useCase);
-
-        } catch(NestedValidationException $e) {
-
-            return $this->BadRequest($e->getMessages());
 
         } catch (\Error $err) {
 
@@ -58,42 +46,22 @@ final class RoleIntegratonController extends BaseController
         }
     }
 
-//    public function execute(): Response
-//    {
-//
-////        $userValidator = v::attribute('id', v::intVal())->
-////                            attribute('name', v::notEmpty());
-//
-////        $user = new \stdClass();
-////        $user->id = "asdasdas";
-////        $user->name= "";
-//
-////        try {
-////
-////            $validate = $userValidator->validate($user);
-////
-////            $userValidator->assert($user);
-////
-////            return $this->Ok($user);
-////
-////        } catch(NestedValidationException $e) {
-////
-////            return $this->BadRequest($e->getMessages());
-////
-////        }
-//
-//
-//
-////        try {
-////
-////            $getBodyParsed = $this->getParsedBody();
-////            $roleRequestDTO = new RoleRequestDTO($getBodyParsed);
-////            $useCase = $this->useCase->execute($roleRequestDTO);
-////
-////            return $this->Ok($useCase);
-////
-////        } catch ( \Exception $e ){
-////            return $this->BadRequest($e->getMessage());
-////        }
-//    }
+    public function validateParsedBody($body): ?Response
+    {
+        try {
+
+            $userValidator = v::attribute('id', v::intVal())->
+            attribute('name', v::notEmpty())->
+            attribute('active', v::boolVal())->
+            attribute('description', v::notEmpty());
+            $userValidator->assert($body);
+
+        }  catch(NestedValidationException $e) {
+
+            return $this->BadRequest($e->getMessages());
+
+        }
+        return null;
+    }
+
 }

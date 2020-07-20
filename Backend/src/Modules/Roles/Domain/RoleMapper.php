@@ -1,16 +1,13 @@
 <?php
 namespace App\Modules\Roles\Domain;
 use App\Core\Domain\BaseAutoMapper;
-use App\Modules\Roles\Application\RoleRequestDTO;
-use App\Modules\Roles\Application\RoleResponseDTO;
-use App\Modules\Roles\Infrastructure\Persistence\RoleModel;
 use AutoMapperPlus\AutoMapperInterface;
 use AutoMapperPlus\Configuration\AutoMapperConfigInterface;
 use AutoMapperPlus\Exception\UnregisteredMappingException;
 use AutoMapperPlus\NameConverter\NamingConvention\CamelCaseNamingConvention;
 use AutoMapperPlus\NameConverter\NamingConvention\SnakeCaseNamingConvention;
 
-class RoleMapper extends BaseAutoMapper
+class RoleMapper extends BaseAutoMapper implements RoleMapperInterface
 {
     public AutoMapperInterface $autoMapper;
     public AutoMapperConfigInterface $config;
@@ -43,6 +40,7 @@ class RoleMapper extends BaseAutoMapper
                 return ($source->active == true)? 'ACTIVE' : 'NO ACTIVE';
             });
 
+        $this->config->registerMapping('array', RoleResponseDTO::class);
 
     }
 
@@ -55,4 +53,12 @@ class RoleMapper extends BaseAutoMapper
     }
 
 
+    public function mapMultiple($source, string $destinationClass)
+    {
+        try {
+            return $this->autoMapper->mapMultiple($source, $destinationClass);
+        } catch (UnregisteredMappingException $e) {
+            throw new \Exception($e);
+        }
+    }
 }

@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class RoleModel extends Model
 {
     protected $table = 'role';
-    protected $fillable = ['id', 'name', 'active', 'created_at', 'updated_at', 'description_role'];
+    protected $fillable = ['id', 'name', 'active', 'created_at', 'updated_at', 'description'];
     use SoftDeletes;
 }

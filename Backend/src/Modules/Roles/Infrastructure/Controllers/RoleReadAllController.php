@@ -2,43 +2,42 @@
 namespace App\Modules\Roles\Infrastructure\Controllers;
 
 use App\Core\Infrastructure\Http\BaseController;
-use App\Modules\Roles\Application\RoleDTORequest;
-use App\Modules\Roles\Application\RoleFindAllUseCase;
-use App\Modules\Roles\Application\RoleFindUseCase;
-use DI\Container;
+use App\Modules\Roles\Application\RoleUseCaseInterface;
+use App\Modules\Roles\Application\UseCase\RoleFindAllUseCase;
+use App\Modules\Roles\Domain\RoleMapperInterface;
+use App\Modules\Roles\Domain\RoleValidatorInterface;
+use Psr\Log\LoggerInterface;
 use Slim\Http\Response;
 
 class RoleReadAllController extends BaseController
 {
-    private RoleFindAllUseCase $roleUseCase;
+    protected RoleUseCaseInterface $useCase;
+    protected RoleMapperInterface $roleMapper;
+    protected LoggerInterface $logger;
+    protected RoleValidatorInterface $roleValidator;
 
-    public function __construct(RoleFindAllUseCase $roleUseCase, Container $container)
+    public function __construct(RoleFindAllUseCase $useCase, RoleMapperInterface $roleMapper, LoggerInterface $logger, RoleValidatorInterface $roleValidator)
     {
-        parent::__construct($container);
 
+        $this->logger = $logger;
+        $this->useCase = $useCase;
+        $this->roleMapper = $roleMapper;
+        $this->roleValidator = $roleValidator;
 
-        $this->roleUseCase = $roleUseCase;
     }
 
-    protected function execute(): Response
+    public function execute(): Response
     {
         try {
 
-            $execute = $this->roleUseCase->execute(new RoleDTORequest([]));
+            $args = (object) $this->getArgs();
+            $useCase = $this->useCase->__invoke();
 
-            return $this->Ok($execute);
+            return $this->Ok($useCase);
 
         } catch (\Exception $e) {
 
             return $this->BadRequest($e->getMessage());
-
-        } catch (\Error $e) {
-
-            $concat = $e->getMessage() .' - '.  $e->getCode() .' - '. $e->getFile().' - '. $e->getLine();
-
-            $this->logger->error($concat);
-
-            return $this->ServerError();
 
         }
     }

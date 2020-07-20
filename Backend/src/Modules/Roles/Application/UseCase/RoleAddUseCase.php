@@ -1,54 +1,15 @@
 <?php
-namespace App\Modules\Roles\Application;
+namespace App\Modules\Roles\Application\UseCase;
+use App\Modules\Roles\Application\RoleUseCaseInterface;
+use App\Modules\Roles\Domain\RoleRequestDTO;
+use App\Modules\Roles\Domain\RoleResponseDTO;
 
-use App\Modules\Roles\Domain\RoleRepository;
-use Monolog\Logger;
-
-class RoleAddUseCase
+class RoleAddUseCase extends RoleUseCaseImp implements RoleUseCaseInterface
 {
-    private RoleRepository $roleRepository;
-    private Logger $logger;
-
-    public function __construct(RoleRepository $roleRepository, Logger $logger)
+    public function __invoke(RoleRequestDTO $requestDTO): RoleResponseDTO
     {
-        $this->roleRepository = $roleRepository;
-        $this->logger = $logger;
+        $this->logger->info('Entrando al caso de uso');
+        $result = $this->roleRepository->add($requestDTO);
+        return $this->roleMapper->map($result, RoleResponseDTO::class);
     }
-
-    public function execute(RoleDTORequest $roleDTORequest): RoleDTOResponseData
-    {
-        try
-        {
-            $role = $this->roleRepository->create($roleDTORequest);
-            return new RoleDTOResponseData($role);
-
-        } catch (\Exception $e)
-        {
-            throw new \Exception($e->getMessage());
-        }
-
-    }
-
-    public function validate(array $validateRequest): RoleDTORequest
-    {
-
-        if(empty($validateRequest)){
-            throw new \Exception('El servicio debe recibir parámetros en el body de la petición');
-        }
-
-        if(empty($validateRequest['name'])) {
-            throw new \Exception('los campos del servicio son requeridos');
-        }
-
-        try
-        {
-            return new RoleDTORequest($validateRequest);
-
-        } catch (\Error $e) {
-            $concat = "Message: ".$e->getMessage() . " | Code: ". $e->getCode() . " | Line: ". $e->getLine() . " | FileName: ". $e->getFile();
-            $this->logger->error($concat);
-            throw new \Error($concat);
-        }
-    }
-
 }

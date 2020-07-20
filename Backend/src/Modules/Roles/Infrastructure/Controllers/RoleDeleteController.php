@@ -1,56 +1,43 @@
 <?php
-
-
 namespace App\Modules\Roles\Infrastructure\Controllers;
 
-
-use App\Core\Application\BaseRequest;
 use App\Core\Infrastructure\Http\BaseController;
-use App\Modules\Roles\Application\RoleDTORequest;
-use App\Modules\Roles\Application\RoleRemoveUseCase;
-use App\Modules\Roles\Domain\Role;
-use DI\Container;
+use App\Modules\Roles\Application\RoleUseCaseInterface;
+use App\Modules\Roles\Application\UseCase\RoleRemoveUseCase;
+use App\Modules\Roles\Domain\RoleMapperInterface;
+use App\Modules\Roles\Domain\RoleValidatorInterface;
+use Psr\Log\LoggerInterface;
 use Slim\Http\Response;
 
 class RoleDeleteController extends BaseController
 {
-    private RoleRemoveUseCase $roleUseCase;
-    private BaseRequest $dtoRequest;
+    protected RoleUseCaseInterface $useCase;
+    protected RoleMapperInterface $roleMapper;
+    protected LoggerInterface $logger;
+    protected RoleValidatorInterface $roleValidator;
 
-    public function __construct(RoleRemoveUseCase $roleUseCase, Container $container, BaseRequest $dtoRequest)
+    public function __construct(RoleRemoveUseCase $useCase, RoleMapperInterface $roleMapper, LoggerInterface $logger, RoleValidatorInterface $roleValidator)
     {
-        parent::__construct($container);
-        $this->roleUseCase = $roleUseCase;
+
+        $this->logger = $logger;
+        $this->useCase = $useCase;
+        $this->roleMapper = $roleMapper;
+        $this->roleValidator = $roleValidator;
+
     }
 
-    protected function execute(): Response
+    public function execute(): Response
     {
         try {
 
-            // FormRequest
-            // Argumentos
-            // $roleDTORequest = new RoleDTORequest($args);
-            // $roleDTORequest->id = (int) $args['id'];
-            // $dtoRequest = new BaseRequest();
-            // $args = $this->getArgs();
+            $args = (object) $this->getArgs();
+            $useCase = $this->useCase->__invoke($args->id);
 
-            $this->dtoRequest->setData($this->getParsedBody());
-
-            $execute = $this->roleUseCase->execute($this->dtoRequest);
-
-            return $this->Ok($execute);
+            return $this->Ok($useCase);
 
         } catch (\Exception $e) {
 
             return $this->BadRequest($e->getMessage());
-
-        } catch (\Error $e) {
-
-            $concat = $e->getMessage() .' - '.  $e->getCode() .' - '. $e->getFile().' - '. $e->getLine();
-
-            $this->logger->error($concat);
-
-            return $this->ServerError();
 
         }
     }

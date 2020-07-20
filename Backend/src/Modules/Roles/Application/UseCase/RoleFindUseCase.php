@@ -1,34 +1,17 @@
 <?php
+namespace App\Modules\Roles\Application\UseCase;
 
+use App\Modules\Roles\Application\RoleUseCaseInterface;
+use App\Modules\Roles\Domain\RoleRequestDTO;
+use App\Modules\Roles\Domain\RoleResponseDTO;
 
-namespace App\Modules\Roles\Application;
-
-
-use App\Modules\Roles\Domain\RoleRepository;
-use Monolog\Logger;
-
-class RoleFindUseCase
+class RoleFindUseCase extends RoleUseCaseImp implements RoleUseCaseInterface
 {
-    private RoleRepository $roleRepository;
-    private Logger $logger;
-
-    public function __construct(RoleRepository $roleRepository, Logger $logger)
+    public function __invoke(int $id): RoleResponseDTO
     {
-        $this->roleRepository = $roleRepository;
-        $this->logger = $logger;
+        $this->logger->info('Entrando al caso de uso');
+        $result = $this->roleRepository->findById($id);
+        return $this->roleMapper->map($result, RoleResponseDTO::class);
     }
 
-    public function execute(RoleDTORequest $roleDTORequest): RoleDTOResponseData
-    {
-        try
-        {
-            $role = $this->roleRepository->readById($roleDTORequest->id);
-            return new RoleDTOResponseData($role);
-
-        } catch (\Exception $e)
-        {
-            throw new \Exception($e->getMessage());
-        }
-
-    }
 }

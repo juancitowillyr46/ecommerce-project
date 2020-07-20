@@ -1,27 +1,17 @@
 <?php
-namespace App\Modules\Roles\Application;
+namespace App\Modules\Roles\Application\UseCase;
 
 use App\Core\Application\BaseRequest;
-use App\Core\Application\DtoResponseData;
+use App\Modules\Roles\Application\RoleUseCaseInterface;
 use App\Modules\Roles\Domain\Role;
+use App\Modules\Roles\Domain\RoleResponseDTO;
 
-class RoleRemoveUseCase extends BaseUseCase
+class RoleRemoveUseCase extends RoleUseCaseImp implements RoleUseCaseInterface
 {
-    public function execute(BaseRequest $dtoRequest): DtoResponseData
+    public function __invoke(int $id): RoleResponseDTO
     {
-        try
-        {
-
-            $data = $dtoRequest->getData();
-            $roleDtoRequestData = new RoleDtoRequestData($data);
-            $role = new Role();
-            $role = $this->roleRepository->delete($roleDtoRequestData->id);
-
-            return new RoleDTOResponseData($role);
-
-        } catch (\Exception $e)
-        {
-            throw new \Exception($e->getMessage());
-        }
+        $this->logger->info('Entrando al caso de uso');
+        $result = $this->roleRepository->remove($id);
+        return $this->roleMapper->map($result, RoleResponseDTO::class);
     }
 }

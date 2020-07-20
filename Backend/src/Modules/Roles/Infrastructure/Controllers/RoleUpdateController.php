@@ -1,45 +1,75 @@
 <?php
 namespace App\Modules\Roles\Infrastructure\Controllers;
 
-
 use App\Core\Infrastructure\Http\BaseController;
-use App\Modules\Roles\Application\RoleEditUseCase;
-use DI\Container;
-use Monolog\Logger;
+use App\Modules\Roles\Application\RoleUseCaseInterface;
+use App\Modules\Roles\Application\UseCase\RoleEditUseCase;
+use App\Modules\Roles\Domain\RoleMapperInterface;
+use App\Modules\Roles\Domain\RoleRequestDTO;
+use App\Modules\Roles\Domain\RoleValidatorInterface;
+use Psr\Log\LoggerInterface;
+use Respect\Validation\Exceptions\NestedValidationException;
+use Respect\Validation\Validator as v;
 use Slim\Http\Response;
 
 class RoleUpdateController extends BaseController
 {
-    private RoleEditUseCase $roleUseCase;
+    protected RoleUseCaseInterface $useCase;
+    protected RoleMapperInterface $roleMapper;
+    protected LoggerInterface $logger;
+    protected RoleValidatorInterface $roleValidator;
 
-    public function __construct(RoleEditUseCase $roleUseCase, Container $container)
+    public function __construct(RoleEditUseCase $useCase, RoleMapperInterface $roleMapper, LoggerInterface $logger, RoleValidatorInterface $roleValidator)
     {
-        parent::__construct($container);
-        $this->roleUseCase = $roleUseCase;
+        $this->logger = $logger;
+        $this->useCase = $useCase;
+        $this->roleMapper = $roleMapper;
+        $this->roleValidator = $roleValidator;
     }
 
-    protected function execute(): Response
+    public function execute(): Response
     {
         try {
 
-            $parsedBody = $this->getParsedBody();
+            $body = (object) $this->getParsedBody();
+            $args = (object) $this->getArgs();
 
-            $args = $this->getArgs();
+            $message = $this->roleValidator->validatorParsedBody($body);
+            if(count($message) > 0){
+                return $this->BadRequest($message);
+            }
 
-            $roleDTORequest = $this->roleUseCase->validate($parsedBody);
-            $roleDTORequest->id = $args['id'];
-            $execute = $this->roleUseCase->execute($roleDTORequest);
+            $result = $this->roleMapper->map($body, RoleRequestDTO::class);
+            $useCase = $this->useCase->__invoke((int) $args->id, $result);
 
-            return $this->Ok($execute);
+            return $this->Ok($useCase);
+
+        } catch (\Error $err) {
+
+            return $this->ServerError($err->getMessage());
 
         } catch (\Exception $e) {
 
             return $this->BadRequest($e->getMessage());
 
-        } catch (\Error $e) {
+        }
+    }
 
-            return $this->ServerError();
+    public function validateParsedBody($body): ?Response
+    {
+        try {
+
+            $userValidator = v::attribute('id', v::intVal())->
+            attribute('name', v::notEmpty())->
+            attribute('active', v::boolVal())->
+            attribute('description', v::notEmpty());
+            $userValidator->assert($body);
+
+        }  catch(NestedValidationException $e) {
+
+            return $this->BadRequest($e->getMessages());
 
         }
+        return null;
     }
 }
