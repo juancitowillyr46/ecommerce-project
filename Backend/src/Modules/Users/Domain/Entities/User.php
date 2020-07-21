@@ -1,5 +1,5 @@
 <?php
-namespace App\Modules\Users\Domain;
+namespace App\Modules\Users\Domain\Entities;
 
 class User
 {
@@ -7,13 +7,12 @@ class User
     public string $username;
     public string $password;
     public string $email;
-    public bool $status_id;
     public bool $active;
-    public string $token_activate;
-    public \DateTime $created_at;
-    public \DateTime $updated_at;
-    public \DateTime $deleted_at;
+    public string $token_active;
+    public int $status_id;
     public int $role_id;
+    public string $created_at;
+    public string $updated_at;
 
     public function __construct()
     {

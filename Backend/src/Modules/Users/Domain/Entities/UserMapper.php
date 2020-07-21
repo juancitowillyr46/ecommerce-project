@@ -1,13 +1,13 @@
 <?php
-namespace App\Modules\Roles\Domain;
+namespace App\Modules\Users\Domain\Entities;
+
 use App\Core\Domain\BaseAutoMapper;
 use AutoMapperPlus\AutoMapperInterface;
 use AutoMapperPlus\Configuration\AutoMapperConfigInterface;
-use AutoMapperPlus\Exception\UnregisteredMappingException;
 use AutoMapperPlus\NameConverter\NamingConvention\CamelCaseNamingConvention;
 use AutoMapperPlus\NameConverter\NamingConvention\SnakeCaseNamingConvention;
 
-class RoleMapper extends BaseAutoMapper implements RoleMapperInterface
+class UserMapper extends BaseAutoMapper implements UserMapperInterface
 {
     public AutoMapperInterface $autoMapper;
     public AutoMapperConfigInterface $config;
@@ -20,28 +20,31 @@ class RoleMapper extends BaseAutoMapper implements RoleMapperInterface
     public function registerMapping() {
 
         // Http Request -> Entity Request
-        $this->config->registerMapping(\stdClass::class, RoleRequestDTO::class);
+        $this->config->registerMapping(\stdClass::class, UserRequest::class);
 
         // Entity Request -> Entity
-        $this->config->registerMapping(RoleRequestDTO::class, Role::class)
+        $this->config->registerMapping(UserRequest::class, User::class)
             ->withNamingConventions(
                 new CamelCaseNamingConvention(),
                 new SnakeCaseNamingConvention()
             );
 
-        $this->config->registerMapping(\stdClass::class, Role::class);
+        $this->config->registerMapping(\stdClass::class, User::class);
 
         // Entity -> Entity Response
-        $this->config->registerMapping(Role::class, RoleResponseDTO::class)
+        $this->config->registerMapping(User::class, UserResponse::class)
             ->withNamingConventions(
                 new SnakeCaseNamingConvention(),
                 new CamelCaseNamingConvention()
-            )->forMember('active', function (\App\Modules\Roles\Domain\Role $source) {
+            )->forMember('active', function (User $source) {
                 return ($source->active == true)? 'ACTIVE' : 'NO ACTIVE';
+            })->forMember('status', function (User $source) {
+                return 'ENABLED';
+            })->forMember('role', function (User $source) {
+                return 'USER';
             });
 
-        $this->config->registerMapping('array', RoleResponseDTO::class);
+        $this->config->registerMapping('array', UserResponse::class);
 
     }
-
 }

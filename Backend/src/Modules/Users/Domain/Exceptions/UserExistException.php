@@ -1,16 +1,13 @@
 <?php
 namespace App\Modules\Users\Domain\Exceptions;
 
-use App\Modules\Users\Infrastructure\UsersExceptionMessage;
+use App\Modules\Users\Infrastructure\Persistence;
 use Exception;
 
-class UsersExistException extends Exception
+class UserExistException extends Exception
 {
-
     public function __construct($message = "", $code = 0) {
-
-        $message = UsersExceptionMessage::USERS_EXIST;
-
+        $message = UserExceptionMessage::USER_EXIST;
         parent::__construct($message, $code);
     }
 }

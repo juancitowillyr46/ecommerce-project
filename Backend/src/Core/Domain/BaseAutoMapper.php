@@ -15,4 +15,9 @@ abstract class BaseAutoMapper
         $this->registerMapping();
     }
 
+    public function getMapper(): AutoMapperInterface
+    {
+        return $this->autoMapper;
+    }
+
 }
