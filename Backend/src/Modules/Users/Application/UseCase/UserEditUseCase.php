@@ -27,7 +27,4 @@ class UserEditUseCase extends UserUseCaseImp implements UserUseCaseInterface
         }
     }
 
-//    public function encryptPassword(UserRequest $userRequest): string {
-//        return EncryptPassword::encrypt($userRequest->password);
-//    }
 }

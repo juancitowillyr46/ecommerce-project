@@ -77,17 +77,61 @@ class EloquentUserRepositoryInterface implements UserRepositoryInterface
 
     public function findById(int $id): ?User
     {
-        return new User();
+        try {
+
+            $userModel = UserModel::findOrFail($id);
+            $returnData = (object) $userModel->toArray();
+            return $this->userMapper->getMapper()->map($returnData, User::class);
+
+        } catch (\Exception $e) {
+
+            if($e->getCode() === '23000'){
+                throw new \Exception("El recurso no existe en la base de datos");
+            } else {
+                throw new \Exception("Hubo un problema al encontrar el recurso");
+            }
+        }
     }
 
     public function findAll(): array
     {
-        return [];
+        $users = [];
+        try {
+
+            $userModel = UserModel::all();
+
+            foreach ($userModel->all() as $userModel) {
+                $returnData = (object) $userModel->toArray();
+                $users[] = $this->userMapper->getMapper()->map($returnData, User::class);
+            }
+
+        } catch (\Exception $e) {
+
+            throw new \Exception("Recursos no encontrados");
+        }
+
+        return $users;
     }
 
     public function remove(int $id): ?User
     {
-        return new User();
+        try {
+
+            $userModel = UserModel::findOrFail($id);
+            $userModel->update(["active" => false]);
+
+            if($userModel->delete()) {
+
+                $returnData = (object) $userModel->toArray();
+                return $this->userMapper->getMapper()->map($returnData, User::class);
+            }
+
+        } catch (\Exception $e) {
+
+            throw new \Exception("El recurso no fue encontrado");
+        }
+
+        return null;
     }
 
     public function findByEmail(string $email): ?bool

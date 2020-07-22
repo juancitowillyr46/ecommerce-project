@@ -9,7 +9,6 @@ class RoleAddUseCase extends RoleUseCaseImp implements RoleUseCaseInterface
 {
     public function __invoke(RoleRequestDTO $requestDTO): ?RoleResponseDTO
     {
-        $this->logger->info('Entrando al caso de uso');
         $result = $this->roleRepository->add($requestDTO);
         try {
             return $this->roleMapper->getMapper()->map($result, RoleResponseDTO::class);

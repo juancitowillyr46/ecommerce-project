@@ -10,7 +10,6 @@ class RoleFindAllUseCase extends RoleUseCaseImp implements RoleUseCaseInterface
 {
     public function __invoke(): array
     {
-        $this->logger->info('Entrando al caso de uso');
         $result = $this->roleRepository->findAll();
         return $this->roleMapper->getMapper()->mapMultiple($result, RoleResponseDTO::class);
     }

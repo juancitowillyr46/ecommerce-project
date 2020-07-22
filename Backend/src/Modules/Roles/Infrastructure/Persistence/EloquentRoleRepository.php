@@ -129,7 +129,6 @@ class EloquentRoleRepository implements RoleRepositoryInterface
             throw new \Exception("Recursos no encontrados");
         }
 
-//        collect($roles);
         return $roles;
     }
 

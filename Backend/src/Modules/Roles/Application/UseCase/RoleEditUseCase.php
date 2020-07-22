@@ -10,7 +10,6 @@ class RoleEditUseCase extends RoleUseCaseImp implements RoleUseCaseInterface
 {
     public function __invoke(int $id, RoleRequestDTO $requestDTO): ?RoleResponseDTO
     {
-        $this->logger->info('Entrando al caso de uso');
         $result = $this->roleRepository->edit($id, $requestDTO);
         try {
             return $this->roleMapper->getMapper()->map($result, RoleResponseDTO::class);

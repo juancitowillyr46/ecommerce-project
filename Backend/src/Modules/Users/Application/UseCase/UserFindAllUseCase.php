@@ -5,14 +5,14 @@ use App\Modules\Users\Application\UserUseCaseInterface;
 use App\Modules\Users\Domain\Entities\UserResponse;
 use AutoMapperPlus\Exception\UnregisteredMappingException;
 
-class UserFindUseCase extends UserUseCaseImp implements UserUseCaseInterface
+class UserFindAllUseCase extends UserUseCaseImp implements UserUseCaseInterface
 {
-    public function __invoke(int $id): ?UserResponse
+    public function __invoke(): array
     {
         try {
 
-            $result = $this->userRepository->findById($id);
-            return $this->userMapper->getMapper()->map($result, UserResponse::class);
+            $result = $this->userRepository->findAll();
+            return $this->userMapper->getMapper()->mapMultiple($result, UserResponse::class);
 
         } catch (UnregisteredMappingException $e) {
             throw new \Exception($e->getMessage());
@@ -20,5 +20,4 @@ class UserFindUseCase extends UserUseCaseImp implements UserUseCaseInterface
             throw new \Exception($e->getMessage());
         }
     }
-
 }
