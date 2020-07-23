@@ -10,6 +10,9 @@ abstract class BaseController
     protected ServerRequest $request;
     protected Response $response;
     protected array $args = [];
+    protected string $message;
+//    protected string $message;
+
 
     /* Monitor  */
 //    protected LoggerInterface $logger;
@@ -57,8 +60,12 @@ abstract class BaseController
         return $this->response->withStatus(200)->withJson($data);
     }
 
-    public function BadRequest($message) {
-        return $this->response->withStatus(400)->withJson(array("message" => $message));
+    public function Created(ResponseSuccessController $data) {
+        return $this->response->withStatus(201)->withJson($data);
+    }
+
+    public function BadRequest(ResponseErrorController $data) {
+        return $this->response->withStatus(400)->withJson($data);
     }
 
     public function Unauthorized($message) {

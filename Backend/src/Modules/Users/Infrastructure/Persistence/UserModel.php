@@ -12,12 +12,33 @@ class UserModel extends Model
                             'username',
                             'password',
                             'email',
-                            'status_id',
                             'token_active',
                             'active',
                             'role_id',
                             'created_at',
-                            'updated_at'
+                            'updated_at',
+                            'uuid',
+                            'role'
     ];
+
+//    protected $visible = ['id',
+//        'username',
+//        'password',
+//        'email',
+//        'status_id',
+//        'token_active',
+//        'active',
+//        'role_id',
+//        'created_at',
+//        'updated_at',
+//        'role'];
+
     use SoftDeletes;
+
+
+    public function role()
+    {
+        return $this->belongsTo('App\Modules\Roles\Infrastructure\Persistence\RoleModel', 'role_id', 'id');
+    }
+
 }

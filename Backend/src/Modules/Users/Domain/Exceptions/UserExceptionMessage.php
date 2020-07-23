@@ -3,7 +3,7 @@ namespace App\Modules\Users\Domain\Exceptions;
 
 class UserExceptionMessage
 {
-    const USER_NOT_FOUND = "EXISTE UN PROBLEMA AL REGISTRAR";
-    const USER_EXIST = "EL USUARIO SE ENCUENTRA REGISTRADO";
-    const USER_NOT_EXIST = "EL USUARIO NO EXISTE";
+    const USER_NOT_FOUND = "Hubo un problema";
+    const USER_EXIST = "El usuario ya existe";
+    const USER_NOT_EXIST = "El usuario no existe";
 }

@@ -7,6 +7,5 @@ class UserResponse
     public string $username;
     public string $email;
     public string $active;
-    public string $status;
     public string $role;
 }

@@ -22,6 +22,7 @@ class UserMapper extends BaseAutoMapper implements UserMapperInterface
         // Http Request -> Entity Request
         $this->config->registerMapping(\stdClass::class, UserRequest::class);
 
+
         // Entity Request -> Entity
         $this->config->registerMapping(UserRequest::class, User::class)
             ->withNamingConventions(
@@ -31,18 +32,22 @@ class UserMapper extends BaseAutoMapper implements UserMapperInterface
 
         $this->config->registerMapping(\stdClass::class, User::class);
 
-        // Entity -> Entity Response
+
+        // Entity -> Entity ResponseSuccessController
         $this->config->registerMapping(User::class, UserResponse::class)
             ->withNamingConventions(
                 new SnakeCaseNamingConvention(),
                 new CamelCaseNamingConvention()
             )->forMember('active', function (User $source) {
                 return ($source->active == true)? 'ACTIVE' : 'NO ACTIVE';
-            })->forMember('status', function (User $source) {
-                return 'ENABLED';
             })->forMember('role', function (User $source) {
-                return 'USER';
+                return (count($source->role) > 0 )? $source->role['name']: '';
             });
+
+        $this->config->registerMapping('array', UserUuid::class)->withNamingConventions(
+            new SnakeCaseNamingConvention(),
+            new CamelCaseNamingConvention()
+        );
 
         $this->config->registerMapping('array', UserResponse::class);
 

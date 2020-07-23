@@ -3,10 +3,11 @@ namespace App\Modules\Users\Domain\Repositories;
 
 use App\Modules\Users\Domain\Entities\User;
 use App\Modules\Users\Domain\Entities\UserRequest;
+use App\Modules\Users\Domain\Entities\UserUuid;
 
 interface UserRepositoryInterface
 {
-    public function add(UserRequest $object): ?User;
+    public function add(UserRequest $object): ?UserUuid;//
 
     public function edit(int $id, UserRequest $object): ?User;
 

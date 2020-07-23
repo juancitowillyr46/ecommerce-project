@@ -8,6 +8,5 @@ class UserRequest
     public string $password;
     public string $email;
     public bool $active;
-    public int $statusId;
     public int $roleId;
 }

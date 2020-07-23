@@ -8,10 +8,13 @@ use App\Modules\Roles\Infrastructure\Persistence\RoleModel;
 use App\Modules\Users\Domain\Entities\User;
 use App\Modules\Users\Domain\Entities\UserMapperInterface;
 use App\Modules\Users\Domain\Entities\UserRequest;
+use App\Modules\Users\Domain\Entities\UserUuid;
 use App\Modules\Users\Domain\Exceptions\UserExistException;
 use App\Modules\Users\Domain\Exceptions\UserNotFoundException;
 use App\Modules\Users\Domain\Repositories\UserRepositoryInterface;
+use Carbon\Carbon;
 use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
 
 
 class EloquentUserRepositoryInterface implements UserRepositoryInterface
@@ -26,7 +29,7 @@ class EloquentUserRepositoryInterface implements UserRepositoryInterface
         $this->userMapper = $userMapper;
     }
 
-    public function add(UserRequest $object): ?User
+    public function add(UserRequest $object): ?UserUuid
     {
         try {
 
@@ -35,11 +38,16 @@ class EloquentUserRepositoryInterface implements UserRepositoryInterface
             $this->findByUsername($object->username);
 
             $data = (array) $this->userMapper->getMapper()->map($object, User::class);
+
+            $data['uuid'] = Uuid::uuid1();
+
             $userModel = new UserModel($data);
 
             if($userModel->save() == true){
-                $returnData = (object) $userModel->toArray();
-                return $this->userMapper->getMapper()->map($returnData, User::class);
+              return $this->userMapper->getMapper()->map([
+                    "uuid" => $userModel->getAttributeValue('uuid'),
+                    "created_at" => Carbon::now()->toDateTimeString()
+              ], UserUuid::class);
             }
 
         } catch (\Exception $e) {
@@ -79,7 +87,11 @@ class EloquentUserRepositoryInterface implements UserRepositoryInterface
     {
         try {
 
+
             $userModel = UserModel::findOrFail($id);
+
+            $userModel->role;
+            $json = $userModel->toJson();
             $returnData = (object) $userModel->toArray();
             return $this->userMapper->getMapper()->map($returnData, User::class);
 
@@ -99,8 +111,8 @@ class EloquentUserRepositoryInterface implements UserRepositoryInterface
         try {
 
             $userModel = UserModel::all();
-
             foreach ($userModel->all() as $userModel) {
+                $userModel->role;
                 $returnData = (object) $userModel->toArray();
                 $users[] = $this->userMapper->getMapper()->map($returnData, User::class);
             }
@@ -154,4 +166,8 @@ class EloquentUserRepositoryInterface implements UserRepositoryInterface
 
         return false;
     }
+
+//    public function addRelations($userModel) {
+//        return $userModel->role;
+//    }
 }

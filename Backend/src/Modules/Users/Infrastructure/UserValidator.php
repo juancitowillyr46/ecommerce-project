@@ -21,7 +21,6 @@ class UserValidator implements UserValidatorInterface
             attribute('username', v::notEmpty())->
             attribute('password', v::notEmpty())->
             attribute('email', v::notEmpty())->
-            attribute('statusId', v::notEmpty())->
             attribute('active', v::notEmpty())->
             attribute('roleId', v::notEmpty());
             $userValidator->assert($body);

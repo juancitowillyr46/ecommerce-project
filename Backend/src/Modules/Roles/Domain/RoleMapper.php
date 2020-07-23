@@ -31,7 +31,7 @@ class RoleMapper extends BaseAutoMapper implements RoleMapperInterface
 
         $this->config->registerMapping(\stdClass::class, Role::class);
 
-        // Entity -> Entity Response
+        // Entity -> Entity ResponseSuccessController
         $this->config->registerMapping(Role::class, RoleResponseDTO::class)
             ->withNamingConventions(
                 new SnakeCaseNamingConvention(),
