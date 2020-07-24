@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Modules\SignIn\Domain\Entities\SignInMapperInterface;
 use DI\ContainerBuilder;
 
 return function (ContainerBuilder $containerBuilder) {
@@ -17,7 +18,13 @@ return function (ContainerBuilder $containerBuilder) {
         \App\Modules\Users\Application\UserUseCaseInterface::class =>  \DI\autowire(\App\Modules\Users\Application\UseCase\UserUseCaseImp::class),
         \App\Modules\Users\Domain\Repositories\UserRepositoryInterface::class => \DI\autowire(\App\Modules\Users\Infrastructure\Persistence\EloquentUserRepositoryInterface::class),
         \App\Modules\Users\Domain\Entities\UserMapperInterface::class => \DI\autowire(\App\Modules\Users\Domain\Entities\UserMapper::class),
-        \App\Modules\Users\Domain\Exceptions\UserValidatorInterface::class => \DI\autowire(\App\Modules\Users\Infrastructure\UserValidator::class)
+        \App\Modules\Users\Domain\Exceptions\UserValidatorInterface::class => \DI\autowire(\App\Modules\Users\Infrastructure\UserValidator::class),
+
+         /* SignIn */
+        \App\Modules\SignIn\Application\SignInUseCaseInterface::class =>  \DI\autowire(\App\Modules\SignIn\Application\UseCase\SignInUseCaseImp::class),
+        \App\Modules\SignIn\Domain\Repositories\SignInRepositoryInterface::class => \DI\autowire(\App\Modules\SignIn\Infrastructure\Persistence\EloquentSignInRepositoryInterface::class),
+        \App\Modules\SignIn\Domain\Entities\SignInMapperInterface::class => \DI\autowire(\App\Modules\SignIn\Domain\Entities\SignInMapper::class),
+        \App\Modules\SignIn\Domain\Exceptions\SignInValidatorInterface::class => \DI\autowire(\App\Modules\SignIn\Infrastructure\SignInValidator::class)
 
     ]);
 

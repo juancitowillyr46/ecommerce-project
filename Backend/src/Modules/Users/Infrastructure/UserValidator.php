@@ -20,8 +20,8 @@ class UserValidator implements UserValidatorInterface
             $userValidator = v::attribute('username', v::notEmpty())->
             attribute('password', v::notEmpty())->
             attribute('email', v::notEmpty())->
-            attribute('active', v::notEmpty())->
-            attribute('roleId', v::notEmpty());
+            attribute('active', v::boolVal())->
+            attribute('roleUuid', v::notEmpty());
             $userValidator->assert($body);
 
         }  catch(NestedValidationException $e) {

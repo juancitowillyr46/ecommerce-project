@@ -37,13 +37,6 @@ return [
                 PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'
             ],
         ];
-        
-        // $connFactory = new Illuminate\Database\Connectors\ConnectionFactory();
-        // $conn = $connFactory->make($settings);
-        // $resolver = new \Illuminate\Database\ConnectionResolver();
-        // $resolver->addConnection('default', $conn);
-        // $resolver->setDefaultConnection('default');
-        // \Illuminate\Database\Eloquent\Model::setConnectionResolver($resolver);
 
         $capsule = new \Illuminate\Database\Capsule\Manager;
         $capsule->addConnection($settings);
@@ -51,7 +44,6 @@ return [
         $capsule->setAsGlobal();
         $capsule->bootEloquent();
 
-        
         return $app;
     },
     \Psr\Log\LoggerInterface::class => function(ContainerInterface $container)
@@ -69,5 +61,14 @@ return [
     \Respect\Validation\Validator::class => function(ContainerInterface $container)
     {
         return new \Respect\Validation\Validator();
+    },
+    \App\Core\Infrastructure\Security\JwtCustom::class => function(ContainerInterface $container) {
+
+//        $config = $container->get(Configuration::class);
+        $secret = 'manager';
+        $exp = "+1 minutes";
+        return new \App\Core\Infrastructure\Security\JwtCustom($secret, $exp);
     }
+
+
 ];

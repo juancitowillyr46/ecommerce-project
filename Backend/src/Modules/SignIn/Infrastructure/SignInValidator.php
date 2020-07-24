@@ -1,11 +1,11 @@
 <?php
-namespace App\Modules\Roles\Infrastructure;
+namespace App\Modules\SignIn\Infrastructure;
 
-use App\Modules\Roles\Domain\Exceptions\RoleValidatorInterface;
+use App\Modules\SignIn\Domain\Exceptions\SignInValidatorInterface;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as v;
 
-class RoleValidator implements RoleValidatorInterface
+class SignInValidator implements SignInValidatorInterface
 {
     public function validatorParsedBody(\stdClass $body): array
     {
@@ -13,9 +13,8 @@ class RoleValidator implements RoleValidatorInterface
 
         try {
 
-            $userValidator = v::attribute('name', v::notEmpty())->
-            attribute('active', v::boolVal())->
-            attribute('description', v::notEmpty());
+            $userValidator = v::attribute('username', v::notEmpty())->
+            attribute('password', v::notEmpty());
             $userValidator->assert($body);
 
         }  catch(NestedValidationException $e) {
@@ -26,5 +25,4 @@ class RoleValidator implements RoleValidatorInterface
 
         return $message;
     }
-
 }

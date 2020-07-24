@@ -9,7 +9,9 @@ class UserRequest
     public string $email;
     public bool $active;
     public int $roleId;
-    public string $uuid;
+//    public string $uuid;
+    public string $roleUuid;
+//    public string $roleUuid;
 
     public function __construct()
     {

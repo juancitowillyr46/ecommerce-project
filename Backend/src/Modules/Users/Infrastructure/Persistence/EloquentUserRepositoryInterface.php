@@ -1,6 +1,7 @@
 <?php
 namespace App\Modules\Users\Infrastructure\Persistence;
 
+use App\Modules\Roles\Domain\Repositories\RoleRepositoryInterface;
 use App\Modules\Users\Domain\Entities\User;
 use App\Modules\Users\Domain\Entities\UserMapperInterface;
 use App\Modules\Users\Domain\Entities\UserRequest;
@@ -17,12 +18,14 @@ class EloquentUserRepositoryInterface implements UserRepositoryInterface
 {
 
     private UserMapperInterface $userMapper;
+    private RoleRepositoryInterface $roleRepository;
     private LoggerInterface $logger;
 
-    public function __construct(UserMapperInterface $userMapper, LoggerInterface $logger)
+    public function __construct(UserMapperInterface $userMapper, LoggerInterface $logger, RoleRepositoryInterface $roleRepository)
     {
         $this->logger = $logger;
         $this->userMapper = $userMapper;
+        $this->roleRepository = $roleRepository;
     }
 
     public function add(UserRequest $object): ?UserUuid
@@ -32,6 +35,8 @@ class EloquentUserRepositoryInterface implements UserRepositoryInterface
             $this->findByEmail($object->email);
 
             $this->findByUsername($object->username);
+
+            $object->roleId = $this->roleRepository->findByUuid($object->roleUuid);
 
             $object->uuid = "";
 
@@ -58,6 +63,8 @@ class EloquentUserRepositoryInterface implements UserRepositoryInterface
     public function edit(int $id, UserRequest $userRequest): ?UserUuid
     {
         try {
+
+            $userRequest->roleId = $this->roleRepository->findByUuid($userRequest->roleUuid);
 
             $data = (array) $this->userMapper->getMapper()->map($userRequest, User::class);
 

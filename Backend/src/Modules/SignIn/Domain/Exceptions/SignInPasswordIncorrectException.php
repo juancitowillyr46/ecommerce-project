@@ -1,15 +1,14 @@
 <?php
-namespace App\Modules\SignIn\Domain;
+namespace App\Modules\SignIn\Domain\Exceptions;
 
 use App\Modules\SignIn\Infrastructure\SignInExceptionMessage;
 use Exception;
 
-class SignInNotExistException extends Exception
+class SignInPasswordIncorrectException extends Exception
 {
-
     public function __construct($message = "", $code = 0) {
 
-        $message = SignInExceptionMessage::SIGN_IN_NOT_EXIST;
+        $message = SignInExceptionMessage::SIGN_IN_INCORRECT_PASSWORD;
 
         parent::__construct($message, $code);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\core\Infrastructure\Security;
+namespace App\Core\Infrastructure\Security;
 
 
 class EncryptPassword

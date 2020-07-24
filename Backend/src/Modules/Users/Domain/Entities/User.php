@@ -1,8 +1,6 @@
 <?php
 namespace App\Modules\Users\Domain\Entities;
 
-use App\Modules\Roles\Domain\Role;
-
 class User
 {
     public int $id;
@@ -21,6 +19,5 @@ class User
     {
         $this->id = 0;
         $this->role = [];
-//        $this->uuid = "";
     }
 }
