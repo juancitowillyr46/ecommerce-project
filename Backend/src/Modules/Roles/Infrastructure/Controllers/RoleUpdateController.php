@@ -2,11 +2,15 @@
 namespace App\Modules\Roles\Infrastructure\Controllers;
 
 use App\Core\Infrastructure\Http\BaseController;
+use App\Core\Infrastructure\Http\ResponseErrorController;
+use App\Core\Infrastructure\Http\ResponseSuccessController;
 use App\Modules\Roles\Application\RoleUseCaseInterface;
 use App\Modules\Roles\Application\UseCase\RoleEditUseCase;
-use App\Modules\Roles\Domain\RoleMapperInterface;
-use App\Modules\Roles\Domain\RoleRequestDTO;
-use App\Modules\Roles\Domain\RoleValidatorInterface;
+use App\Modules\Roles\Domain\Entities\RoleMapperInterface;
+use App\Modules\Roles\Domain\Entities\RoleRequestDTO;
+use App\Modules\Roles\Domain\Exceptions\RoleValidatorInterface;
+use App\Modules\Roles\Infrastructure\RoleMessageController;
+use App\Modules\Users\Infrastructure\UserMessagesController;
 use Psr\Log\LoggerInterface;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as v;
@@ -25,6 +29,7 @@ class RoleUpdateController extends BaseController
         $this->useCase = $useCase;
         $this->roleMapper = $roleMapper;
         $this->roleValidator = $roleValidator;
+        parent::__construct($logger);
     }
 
     public function execute(): Response
@@ -36,40 +41,25 @@ class RoleUpdateController extends BaseController
 
             $message = $this->roleValidator->validatorParsedBody($body);
             if(count($message) > 0){
-                return $this->BadRequest($message);
+                return $this->BadRequest(new ResponseErrorController($message, ''));
             }
 
-            $result = $this->roleMapper->getMapper()->map($body, RoleRequestDTO::class);
-            $useCase = $this->useCase->__invoke((int) $args->id, $result);
+            $request = $this->roleMapper->getMapper()->map($body, RoleRequestDTO::class);
 
-            return $this->Ok($useCase);
+            $uuid = $this->useCase->__invoke($args->uuid, $request);
 
-        } catch (\Error $err) {
+            return $this->Ok(new ResponseSuccessController(RoleMessageController::EDIT, $uuid));
 
-            return $this->ServerError($err->getMessage());
+        } catch (\Error $e) {
+
+            return $this->ServerError(new ResponseErrorController($e->getMessage(), ''));
 
         } catch (\Exception $e) {
 
-            return $this->BadRequest($e->getMessage());
+            return $this->BadRequest(new ResponseErrorController($e->getMessage(), ''));
+
 
         }
     }
 
-    public function validateParsedBody($body): ?Response
-    {
-        try {
-
-            $userValidator = v::attribute('id', v::intVal())->
-            attribute('name', v::notEmpty())->
-            attribute('active', v::boolVal())->
-            attribute('description', v::notEmpty());
-            $userValidator->assert($body);
-
-        }  catch(NestedValidationException $e) {
-
-            return $this->BadRequest($e->getMessages());
-
-        }
-        return null;
-    }
 }

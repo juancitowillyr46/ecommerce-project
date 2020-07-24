@@ -10,14 +10,17 @@ abstract class BaseController
     protected ServerRequest $request;
     protected Response $response;
     protected array $args = [];
-    protected string $message;
-//    protected string $message;
 
 
     /* Monitor  */
-//    protected LoggerInterface $logger;
+    protected LoggerInterface $logger;
 
     abstract public function execute(): Response;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     public function __invoke(ServerRequest $request, Response $response, array $args): Response {
 
@@ -29,7 +32,8 @@ abstract class BaseController
 
         } catch (\Error $er) {
 
-            return $this->BadRequest($er->getMessage());
+            $this->logger->error($er->getMessage());
+            return $this->BadRequest(new ResponseErrorController('Error interno', ''));
 
         }
 
@@ -56,7 +60,7 @@ abstract class BaseController
 
     }
 
-    public function Ok($data) {
+    public function Ok(ResponseSuccessController $data) {
         return $this->response->withStatus(200)->withJson($data);
     }
 
@@ -80,8 +84,8 @@ abstract class BaseController
         return $this->response->withStatus(404)->withJson($message);
     }
 
-    public function ServerError($message = 'Interval server error') {
-        return $this->response->withStatus(500)->withJson(array("message" => $message));
+    public function ServerError(ResponseErrorController $data) {
+        return $this->response->withStatus(500)->withJson($data);
     }
 
 

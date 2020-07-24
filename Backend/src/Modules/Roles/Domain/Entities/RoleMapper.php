@@ -1,9 +1,9 @@
 <?php
-namespace App\Modules\Roles\Domain;
+namespace App\Modules\Roles\Domain\Entities;
+
 use App\Core\Domain\BaseAutoMapper;
 use AutoMapperPlus\AutoMapperInterface;
 use AutoMapperPlus\Configuration\AutoMapperConfigInterface;
-use AutoMapperPlus\Exception\UnregisteredMappingException;
 use AutoMapperPlus\NameConverter\NamingConvention\CamelCaseNamingConvention;
 use AutoMapperPlus\NameConverter\NamingConvention\SnakeCaseNamingConvention;
 
@@ -36,9 +36,14 @@ class RoleMapper extends BaseAutoMapper implements RoleMapperInterface
             ->withNamingConventions(
                 new SnakeCaseNamingConvention(),
                 new CamelCaseNamingConvention()
-            )->forMember('active', function (\App\Modules\Roles\Domain\Role $source) {
+            )->forMember('active', function (Role $source) {
                 return ($source->active == true)? 'ACTIVE' : 'NO ACTIVE';
             });
+
+        $this->config->registerMapping('array', RoleUuid::class)->withNamingConventions(
+            new SnakeCaseNamingConvention(),
+            new CamelCaseNamingConvention()
+        );
 
         $this->config->registerMapping('array', RoleResponseDTO::class);
 

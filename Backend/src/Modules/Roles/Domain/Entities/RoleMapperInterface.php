@@ -1,8 +1,5 @@
 <?php
-
-
-namespace App\Modules\Roles\Domain;
-
+namespace App\Modules\Roles\Domain\Entities;
 
 use AutoMapperPlus\AutoMapperInterface;
 

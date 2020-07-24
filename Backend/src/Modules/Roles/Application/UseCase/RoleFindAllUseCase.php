@@ -4,7 +4,7 @@
 namespace App\Modules\Roles\Application\UseCase;
 
 use App\Modules\Roles\Application\RoleUseCaseInterface;
-use App\Modules\Roles\Domain\RoleResponseDTO;
+use App\Modules\Roles\Domain\Entities\RoleResponseDTO;
 
 class RoleFindAllUseCase extends RoleUseCaseImp implements RoleUseCaseInterface
 {

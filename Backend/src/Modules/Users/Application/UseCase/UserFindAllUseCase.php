@@ -14,8 +14,6 @@ class UserFindAllUseCase extends UserUseCaseImp implements UserUseCaseInterface
             $result = $this->userRepository->findAll();
             return $this->userMapper->getMapper()->mapMultiple($result, UserResponse::class);
 
-        } catch (UnregisteredMappingException $e) {
-            throw new \Exception($e->getMessage());
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }

@@ -3,7 +3,7 @@ namespace App\Core\Infrastructure\Http;
 
 class ResponseErrorController
 {
-    public string $message;
+    public $message;
     public bool $error;
     public $data;
 

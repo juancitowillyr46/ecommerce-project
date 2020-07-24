@@ -1,11 +1,15 @@
 <?php
 namespace App\Modules\Roles\Infrastructure\Persistence;
-use App\Modules\Roles\Domain\RoleMapperInterface;
-use App\Modules\Roles\Domain\RoleRequestDTO;
-use App\Modules\Roles\Domain\RoleRepositoryInterface;
-use App\Modules\Roles\Domain\Role;
-use App\Modules\Roles\Domain\RoleMapper;
+use App\Modules\Roles\Domain\Entities\RoleMapperInterface;
+use App\Modules\Roles\Domain\Entities\RoleRequestDTO;
+use App\Modules\Roles\Domain\Entities\RoleUuid;
+use App\Modules\Roles\Domain\Exceptions\RoleNotExistException;
+use App\Modules\Roles\Domain\Repositories\RoleRepositoryInterface;
+use App\Modules\Roles\Domain\Entities\Role;
+use App\Modules\Roles\Domain\Entities\RoleMapper;
+use Carbon\Carbon;
 use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
 
 class EloquentRoleRepository implements RoleRepositoryInterface
 {
@@ -19,29 +23,34 @@ class EloquentRoleRepository implements RoleRepositoryInterface
         $this->roleMapper = $roleMapper;
     }
 
-    public function add(RoleRequestDTO $object): ?Role
+    public function add(RoleRequestDTO $object): ?RoleUuid
     {
-
-        $this->logger->info('Entrando al repositorio');
-
         try {
 
+            $object->uuid = "";
+
             $data = (array) $this->roleMapper->getMapper()->map($object, Role::class);
+
+            $data['uuid'] = Uuid::uuid1();
+
             $roleModel = new RoleModel($data);
 
             if($roleModel->save() == true){
-                $returnData = (object) $roleModel->toArray();
-                return $this->roleMapper->getMapper()->map($returnData, Role::class);
+                return $this->roleMapper->getMapper()->map([
+                    "uuid" => $roleModel->getAttributeValue('uuid'),
+                    "created_at" => Carbon::now()->toDateTimeString()
+                ], RoleUuid::class);
             }
 
         } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
             throw new \Exception("Existe un problema al registrar el recurso");
         }
 
         return null;
     }
 
-    public function edit(int $id, RoleRequestDTO $object): ?Role
+    public function edit(int $id, RoleRequestDTO $object): ?RoleUuid
     {
         try {
 
@@ -50,8 +59,10 @@ class EloquentRoleRepository implements RoleRepositoryInterface
             $roleModel = RoleModel::findOrFail($id);
             $success = $roleModel->update($data);
             if($success) {
-                $returnData = (object) $roleModel->toArray();
-                return $this->roleMapper->getMapper()->map($returnData, Role::class);
+                return $this->roleMapper->getMapper()->map([
+                    "uuid" => $roleModel->getAttributeValue('uuid'),
+                    "updated_at" => Carbon::now()->toDateTimeString()
+                ], RoleUuid::class);
             }
 
         } catch (\Exception $e) {
@@ -88,7 +99,7 @@ class EloquentRoleRepository implements RoleRepositoryInterface
     }
 
 
-    public function remove(int $id): ?Role
+    public function remove(int $id): ?RoleUuid
     {
         try {
 
@@ -97,8 +108,10 @@ class EloquentRoleRepository implements RoleRepositoryInterface
 
             if($roleModel->delete()) {
 
-                $returnData = (object) $roleModel->toArray();
-                return $this->roleMapper->getMapper()->map($returnData, Role::class);
+                return $this->roleMapper->getMapper()->map([
+                    "uuid" => $roleModel->getAttributeValue('uuid'),
+                    "deleted_at" => Carbon::now()->toDateTimeString()
+                ], RoleUuid::class);
             }
 
         } catch (\Exception $e) {
@@ -114,9 +127,9 @@ class EloquentRoleRepository implements RoleRepositoryInterface
         $roles = [];
         try {
 
-            $roleModel = RoleModel::all();
+            $roleModels = RoleModel::where('active', 1)->orderBy('id', 'desc')->get();
 
-            foreach ($roleModel->all() as $roleModel) {
+            foreach ($roleModels as $roleModel) {
                 $roleModel->description = is_null($roleModel->description)? '' : $roleModel->description;
                 $roleModel->create_at = is_null($roleModel->create_at)? '' : $roleModel->create_at;
                 $roleModel->updated_at = is_null($roleModel->updated_at)? '' : $roleModel->updated_at;
@@ -132,4 +145,14 @@ class EloquentRoleRepository implements RoleRepositoryInterface
         return $roles;
     }
 
+    public function findByUuid(string $uuid): int
+    {
+        $roleModel = RoleModel::where('uuid', $uuid)->first();
+
+        if($roleModel == null) {
+            throw new RoleNotExistException();
+        }
+
+        return $roleModel->getAttributeValue('id');
+    }
 }

@@ -2,19 +2,22 @@
 namespace App\Modules\Roles\Application\UseCase;
 
 use App\Modules\Roles\Application\RoleUseCaseInterface;
-use App\Modules\Roles\Domain\RoleRequestDTO;
-use App\Modules\Roles\Domain\RoleResponseDTO;
-use AutoMapperPlus\Exception\UnregisteredMappingException;
+use App\Modules\Roles\Domain\Entities\RoleRequestDTO;
+use App\Modules\Roles\Domain\Entities\RoleUuid;
+
 
 class RoleEditUseCase extends RoleUseCaseImp implements RoleUseCaseInterface
 {
-    public function __invoke(int $id, RoleRequestDTO $requestDTO): ?RoleResponseDTO
+    public function __invoke(string $uuid, RoleRequestDTO $requestDTO): ?RoleUuid
     {
-        $result = $this->roleRepository->edit($id, $requestDTO);
+
         try {
-            return $this->roleMapper->getMapper()->map($result, RoleResponseDTO::class);
-        } catch (UnregisteredMappingException $e) {
-            return null;
+
+            $id = $this->roleRepository->findByUuid($uuid);
+            return $this->roleRepository->edit($id, $requestDTO);
+
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
         }
     }
 }

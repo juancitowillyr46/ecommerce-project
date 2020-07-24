@@ -1,27 +1,23 @@
 <?php
-
-
 namespace App\Modules\Users\Application\UseCase;
 
-
-use App\core\Infrastructure\Security\EncryptPassword;
 use App\Modules\Users\Application\UserUseCaseInterface;
 use App\Modules\Users\Domain\Entities\UserRequest;
 use App\Modules\Users\Domain\Entities\UserResponse;
+use App\Modules\Users\Domain\Entities\UserUuid;
 use AutoMapperPlus\Exception\UnregisteredMappingException;
 
 class UserEditUseCase extends UserUseCaseImp implements UserUseCaseInterface
 {
-    public function __invoke(int $id, UserRequest $userRequest): ?UserResponse
+    public function __invoke(string $uuid, UserRequest $userRequest): ?UserUuid
     {
         try {
 
-            $userRequest->password = $this->encryptPassword($userRequest);
-            $result = $this->userRepository->edit($id, $userRequest);
-            return $this->userMapper->getMapper()->map($result, UserResponse::class);
+            $id = $this->userRepository->findByUuid($uuid);
 
-        } catch (UnregisteredMappingException $e) {
-            throw new \Exception($e->getMessage());
+            $userRequest->password = $this->encryptPassword($userRequest);
+            return $this->userRepository->edit($id, $userRequest);
+
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }

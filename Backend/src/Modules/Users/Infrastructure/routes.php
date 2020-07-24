@@ -6,8 +6,8 @@ return function (RouteCollectorProxy $group) {
     $group->group('/users', function (RouteCollectorProxy $group) {
         $group->get('', \App\Modules\Users\Infrastructure\Controllers\UserFindAllController::class);
         $group->post('', \App\Modules\Users\Infrastructure\Controllers\UserAddController::class);
-        $group->put('/{id}', \App\Modules\Users\Infrastructure\Controllers\UserEditController::class);
-        $group->get('/{id}', \App\Modules\Users\Infrastructure\Controllers\UserFindController::class);
-        $group->delete('/{id}', \App\Modules\Users\Infrastructure\Controllers\UserRemoveController::class);
+        $group->put('/{uuid}', \App\Modules\Users\Infrastructure\Controllers\UserEditController::class);
+        $group->get('/{uuid}', \App\Modules\Users\Infrastructure\Controllers\UserFindController::class);
+        $group->delete('/{uuid}', \App\Modules\Users\Infrastructure\Controllers\UserRemoveController::class);
     });
 };

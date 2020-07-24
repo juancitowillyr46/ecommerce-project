@@ -1,10 +1,9 @@
 <?php
 namespace App\Modules\Roles\Infrastructure;
 
-use App\Modules\Roles\Domain\RoleValidatorInterface;
+use App\Modules\Roles\Domain\Exceptions\RoleValidatorInterface;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as v;
-use Slim\Http\Response;
 
 class RoleValidator implements RoleValidatorInterface
 {
@@ -14,7 +13,7 @@ class RoleValidator implements RoleValidatorInterface
 
         try {
 
-            $userValidator = v::attribute('id', v::intVal())->
+            $userValidator = v::attribute('uuid', v::notEmpty())->
             attribute('name', v::notEmpty())->
             attribute('active', v::boolVal())->
             attribute('description', v::notEmpty());

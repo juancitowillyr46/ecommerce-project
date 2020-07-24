@@ -33,7 +33,7 @@ class UserAddController  extends BaseController
         $this->useCase = $useCase;
         $this->userMapper = $userMapper;
         $this->userValidator = $userValidator;
-
+        parent::__construct($logger);
     }
 
     public function execute(): Response

@@ -1,10 +1,10 @@
 <?php
-namespace App\Modules\Roles\Domain;
+namespace App\Modules\Roles\Domain\Entities;
 
 class RoleRequestDTO
 {
-    public int $id;
     public string $name;
     public bool $active;
     public string $description;
+    public string $uuid;
 }

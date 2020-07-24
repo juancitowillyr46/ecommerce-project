@@ -1,5 +1,5 @@
 <?php
-namespace App\Modules\Roles\Domain;
+namespace App\Modules\Roles\Domain\Exceptions;
 
 interface RoleValidatorInterface
 {

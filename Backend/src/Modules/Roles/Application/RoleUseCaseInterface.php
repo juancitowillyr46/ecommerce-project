@@ -1,7 +1,7 @@
 <?php
 namespace App\Modules\Roles\Application;
-use App\Modules\Roles\Domain\RoleRequestDTO;
-use App\Modules\Roles\Domain\RoleResponseDTO;
+use App\Modules\Roles\Domain\Entities\RoleRequestDTO;
+use App\Modules\Roles\Domain\Entities\RoleResponseDTO;
 
 interface RoleUseCaseInterface
 {

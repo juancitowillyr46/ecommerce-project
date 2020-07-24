@@ -1,22 +1,23 @@
 <?php
 namespace App\Modules\Roles\Application\UseCase;
 
-use App\Core\Application\BaseRequest;
 use App\Modules\Roles\Application\RoleUseCaseInterface;
-use App\Modules\Roles\Domain\Role;
-use App\Modules\Roles\Domain\RoleResponseDTO;
+use App\Modules\Roles\Domain\Entities\RoleUuid;
+use App\Modules\Roles\Domain\Entities\RoleResponseDTO;
 use AutoMapperPlus\Exception\UnregisteredMappingException;
 
 class RoleRemoveUseCase extends RoleUseCaseImp implements RoleUseCaseInterface
 {
-    public function __invoke(int $id): ?RoleResponseDTO
+    public function __invoke(string $uuid): ?RoleUuid
     {
-        $this->logger->info('Entrando al caso de uso');
-        $result = $this->roleRepository->remove($id);
+
         try {
-            return $this->roleMapper->getMapper()->map($result, RoleResponseDTO::class);
-        } catch (UnregisteredMappingException $e) {
-            return null;
+
+            $id = $this->roleRepository->findByUuid($uuid);
+            return $this->roleRepository->remove($id);
+
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
         }
     }
 }

@@ -2,8 +2,8 @@
 namespace App\Modules\Roles\Application\UseCase;
 
 use App\Core\Application\BaseUseCase;
-use App\Modules\Roles\Domain\RoleMapperInterface;
-use App\Modules\Roles\Domain\RoleRepositoryInterface;
+use App\Modules\Roles\Domain\Entities\RoleMapperInterface;
+use App\Modules\Roles\Domain\Repositories\RoleRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
 class RoleUseCaseImp extends BaseUseCase

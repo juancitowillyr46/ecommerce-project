@@ -7,11 +7,14 @@ use AutoMapperPlus\Exception\UnregisteredMappingException;
 
 class UserFindUseCase extends UserUseCaseImp implements UserUseCaseInterface
 {
-    public function __invoke(int $id): ?UserResponse
+    public function __invoke(string $uuid): ?UserResponse
     {
         try {
 
+            $id = $this->userRepository->findByUuid($uuid);
+
             $result = $this->userRepository->findById($id);
+
             return $this->userMapper->getMapper()->map($result, UserResponse::class);
 
         } catch (UnregisteredMappingException $e) {

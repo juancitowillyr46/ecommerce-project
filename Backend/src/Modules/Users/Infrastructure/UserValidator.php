@@ -17,8 +17,7 @@ class UserValidator implements UserValidatorInterface
 
         try {
 
-            $userValidator = v::attribute('id', v::intVal())->
-            attribute('username', v::notEmpty())->
+            $userValidator = v::attribute('username', v::notEmpty())->
             attribute('password', v::notEmpty())->
             attribute('email', v::notEmpty())->
             attribute('active', v::notEmpty())->

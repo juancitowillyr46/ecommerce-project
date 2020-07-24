@@ -1,5 +1,5 @@
 <?php
-namespace App\Modules\Roles\Domain;
+namespace App\Modules\Roles\Domain\Entities;
 
 class Role
 {
@@ -9,4 +9,5 @@ class Role
     public string $updated_at;
     public string $created_at;
     public string $description;
+    public string $uuid;
 }

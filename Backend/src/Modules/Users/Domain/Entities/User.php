@@ -21,5 +21,6 @@ class User
     {
         $this->id = 0;
         $this->role = [];
+//        $this->uuid = "";
     }
 }

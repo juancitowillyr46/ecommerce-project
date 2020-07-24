@@ -1,7 +1,7 @@
 <?php
-namespace App\Modules\Users\Domain\Entities;
+namespace App\Modules\Roles\Domain\Entities;
 
-class UserUuid
+class RoleUuid
 {
     public string $uuid;
     public string $createdAt;
