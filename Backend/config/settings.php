@@ -39,9 +39,17 @@ $settings['error_handler_middleware'] = [
     'log_error_details' => true
 ];
 
-// $settings['jwt'] = [
-//     "secret" => "12345678",
-//     "exp" => "+1 minutes"
-// ];
+$settings['jwt'] = [
+    "secret" => "manager",
+    "exp" => "+1 minutes"
+];
+
+$settings['logs'] = [
+    "root" => '/../logs/app.log',
+    "name" => 'APP_WEB',
+    "hola" => $s3_bucket = getenv('DISPLAY')
+];
+
+
 
 return $settings;
